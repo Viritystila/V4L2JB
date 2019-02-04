@@ -8,4 +8,9 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
+mkdir -p $PLATFORM/include
+mkdir -p $PLATFORM/lib
+#cd $PLATFORM
+cp ../videodev2.h $PLATFORM/include
+
 cd ../..

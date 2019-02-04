@@ -128,4 +128,3733 @@ public static native int v4l2_fd_open(int fd, int v4l2_flags);
 // #endif
 
 
+// Parsed from videodev2.h
+
+/* SPDX-License-Identifier: ((GPL-2.0+ WITH Linux-syscall-note) OR BSD-3-Clause) */
+/*
+ *  Video for Linux Two header file
+ *
+ *  Copyright (C) 1999-2012 the contributors
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  Alternatively you can redistribute this file under the terms of the
+ *  BSD license as stated below:
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *  1. Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *  2. Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *  3. The names of its contributors may not be used to endorse or promote
+ *     products derived from this software without specific prior written
+ *     permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ *  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ *  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ *  TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ *  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ *  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ *  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ *	Header file for v4l or V4L2 drivers and applications
+ * with public API.
+ * All kernel-specific stuff were moved to media/v4l2-dev.h, so
+ * no #if __KERNEL tests are allowed here
+ *
+ *	See https://linuxtv.org for more info
+ *
+ *	Author: Bill Dirks <bill@thedirks.org>
+ *		Justin Schoeman
+ *              Hans Verkuil <hverkuil@xs4all.nl>
+ *		et al.
+ */
+// #ifndef _UAPI__LINUX_VIDEODEV2_H
+// #define _UAPI__LINUX_VIDEODEV2_H
+
+// #ifndef __KERNEL__
+// #include <sys/time.h>
+// #endif
+// #include </home/mikael/compiler.h>
+// #include <linux/ioctl.h>
+// #include <linux/types.h>
+// #include <linux/v4l2-common.h>
+// #include <linux/v4l2-controls.h>
+
+/*
+ * Common stuff for both V4L1 and V4L2
+ * Moved from videodev.h
+ */
+public static final int VIDEO_MAX_FRAME =               32;
+public static final int VIDEO_MAX_PLANES =               8;
+
+/*
+ *	M I S C E L L A N E O U S
+ */
+
+/*  Four-character-code (FOURCC) */
+// #define v4l2_fourcc(a, b, c, d)
+// 	((__u32)(a) | ((__u32)(b) << 8) | ((__u32)(c) << 16) | ((__u32)(d) << 24))
+// #define v4l2_fourcc_be(a, b, c, d)	(v4l2_fourcc(a, b, c, d) | (1 << 31))
+
+/*
+ *	E N U M S
+ */
+/** enum v4l2_field */
+public static final int
+	V4L2_FIELD_ANY           = 0, /* driver can choose from none,
+					 top, bottom, interlaced
+					 depending on whatever it thinks
+					 is approximate ... */
+	V4L2_FIELD_NONE          = 1, /* this device has no fields ... */
+	V4L2_FIELD_TOP           = 2, /* top field only */
+	V4L2_FIELD_BOTTOM        = 3, /* bottom field only */
+	V4L2_FIELD_INTERLACED    = 4, /* both fields interlaced */
+	V4L2_FIELD_SEQ_TB        = 5, /* both fields sequential into one
+					 buffer, top-bottom order */
+	V4L2_FIELD_SEQ_BT        = 6, /* same as above + bottom-top order */
+	V4L2_FIELD_ALTERNATE     = 7, /* both fields alternating into
+					 separate buffers */
+	V4L2_FIELD_INTERLACED_TB = 8, /* both fields interlaced, top field
+					 first and the top field is
+					 transmitted first */
+	V4L2_FIELD_INTERLACED_BT = 9; /* both fields interlaced, top field
+					 first and the bottom field is
+					 transmitted first */
+// #define V4L2_FIELD_HAS_TOP(field)
+// 	((field) == V4L2_FIELD_TOP	||
+// 	 (field) == V4L2_FIELD_INTERLACED ||
+// 	 (field) == V4L2_FIELD_INTERLACED_TB ||
+// 	 (field) == V4L2_FIELD_INTERLACED_BT ||
+// 	 (field) == V4L2_FIELD_SEQ_TB	||
+// 	 (field) == V4L2_FIELD_SEQ_BT)
+// #define V4L2_FIELD_HAS_BOTTOM(field)
+// 	((field) == V4L2_FIELD_BOTTOM	||
+// 	 (field) == V4L2_FIELD_INTERLACED ||
+// 	 (field) == V4L2_FIELD_INTERLACED_TB ||
+// 	 (field) == V4L2_FIELD_INTERLACED_BT ||
+// 	 (field) == V4L2_FIELD_SEQ_TB	||
+// 	 (field) == V4L2_FIELD_SEQ_BT)
+// #define V4L2_FIELD_HAS_BOTH(field)
+// 	((field) == V4L2_FIELD_INTERLACED ||
+// 	 (field) == V4L2_FIELD_INTERLACED_TB ||
+// 	 (field) == V4L2_FIELD_INTERLACED_BT ||
+// 	 (field) == V4L2_FIELD_SEQ_TB ||
+// 	 (field) == V4L2_FIELD_SEQ_BT)
+// #define V4L2_FIELD_HAS_T_OR_B(field)
+// 	((field) == V4L2_FIELD_BOTTOM ||
+// 	 (field) == V4L2_FIELD_TOP ||
+// 	 (field) == V4L2_FIELD_ALTERNATE)
+
+/** enum v4l2_buf_type */
+public static final int
+	V4L2_BUF_TYPE_VIDEO_CAPTURE        = 1,
+	V4L2_BUF_TYPE_VIDEO_OUTPUT         = 2,
+	V4L2_BUF_TYPE_VIDEO_OVERLAY        = 3,
+	V4L2_BUF_TYPE_VBI_CAPTURE          = 4,
+	V4L2_BUF_TYPE_VBI_OUTPUT           = 5,
+	V4L2_BUF_TYPE_SLICED_VBI_CAPTURE   = 6,
+	V4L2_BUF_TYPE_SLICED_VBI_OUTPUT    = 7,
+	V4L2_BUF_TYPE_VIDEO_OUTPUT_OVERLAY = 8,
+	V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE = 9,
+	V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE  = 10,
+	V4L2_BUF_TYPE_SDR_CAPTURE          = 11,
+	V4L2_BUF_TYPE_SDR_OUTPUT           = 12,
+	V4L2_BUF_TYPE_META_CAPTURE         = 13,
+	V4L2_BUF_TYPE_META_OUTPUT	    = 14,
+	/* Deprecated, do not use */
+	V4L2_BUF_TYPE_PRIVATE              = 0x80;
+
+// #define V4L2_TYPE_IS_MULTIPLANAR(type)
+// 	((type) == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE
+// 	 || (type) == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE)
+
+// #define V4L2_TYPE_IS_OUTPUT(type)
+// 	((type) == V4L2_BUF_TYPE_VIDEO_OUTPUT
+// 	 || (type) == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE
+// 	 || (type) == V4L2_BUF_TYPE_VIDEO_OVERLAY
+// 	 || (type) == V4L2_BUF_TYPE_VIDEO_OUTPUT_OVERLAY
+// 	 || (type) == V4L2_BUF_TYPE_VBI_OUTPUT
+// 	 || (type) == V4L2_BUF_TYPE_SLICED_VBI_OUTPUT
+// 	 || (type) == V4L2_BUF_TYPE_SDR_OUTPUT)
+
+/** enum v4l2_tuner_type */
+public static final int
+	V4L2_TUNER_RADIO	      = 1,
+	V4L2_TUNER_ANALOG_TV	      = 2,
+	V4L2_TUNER_DIGITAL_TV	      = 3,
+	V4L2_TUNER_SDR               = 4,
+	V4L2_TUNER_RF                = 5;
+
+/* Deprecated, do not use */
+public static final int V4L2_TUNER_ADC =  V4L2_TUNER_SDR;
+
+/** enum v4l2_memory */
+public static final int
+	V4L2_MEMORY_MMAP             = 1,
+	V4L2_MEMORY_USERPTR          = 2,
+	V4L2_MEMORY_OVERLAY          = 3,
+	V4L2_MEMORY_DMABUF           = 4;
+
+/* see also http://vektor.theorem.ca/graphics/ycbcr/ */
+/** enum v4l2_colorspace */
+public static final int
+	/*
+	 * Default colorspace, i.e. let the driver figure it out.
+	 * Can only be used with video capture.
+	 */
+	V4L2_COLORSPACE_DEFAULT       = 0,
+
+	/* SMPTE 170M: used for broadcast NTSC/PAL SDTV */
+	V4L2_COLORSPACE_SMPTE170M     = 1,
+
+	/* Obsolete pre-1998 SMPTE 240M HDTV standard, superseded by Rec 709 */
+	V4L2_COLORSPACE_SMPTE240M     = 2,
+
+	/* Rec.709: used for HDTV */
+	V4L2_COLORSPACE_REC709        = 3,
+
+	/*
+	 * Deprecated, do not use. No driver will ever return this. This was
+	 * based on a misunderstanding of the bt878 datasheet.
+	 */
+	V4L2_COLORSPACE_BT878         = 4,
+
+	/*
+	 * NTSC 1953 colorspace. This only makes sense when dealing with
+	 * really, really old NTSC recordings. Superseded by SMPTE 170M.
+	 */
+	V4L2_COLORSPACE_470_SYSTEM_M  = 5,
+
+	/*
+	 * EBU Tech 3213 PAL/SECAM colorspace. This only makes sense when
+	 * dealing with really old PAL/SECAM recordings. Superseded by
+	 * SMPTE 170M.
+	 */
+	V4L2_COLORSPACE_470_SYSTEM_BG = 6,
+
+	/*
+	 * Effectively shorthand for V4L2_COLORSPACE_SRGB, V4L2_YCBCR_ENC_601
+	 * and V4L2_QUANTIZATION_FULL_RANGE. To be used for (Motion-)JPEG.
+	 */
+	V4L2_COLORSPACE_JPEG          = 7,
+
+	/* For RGB colorspaces such as produces by most webcams. */
+	V4L2_COLORSPACE_SRGB          = 8,
+
+	/* opRGB colorspace */
+	V4L2_COLORSPACE_OPRGB         = 9,
+
+	/* BT.2020 colorspace, used for UHDTV. */
+	V4L2_COLORSPACE_BT2020        = 10,
+
+	/* Raw colorspace: for RAW unprocessed images */
+	V4L2_COLORSPACE_RAW           = 11,
+
+	/* DCI-P3 colorspace, used by cinema projectors */
+	V4L2_COLORSPACE_DCI_P3        = 12;
+
+/*
+ * Determine how COLORSPACE_DEFAULT should map to a proper colorspace.
+ * This depends on whether this is a SDTV image (use SMPTE 170M), an
+ * HDTV image (use Rec. 709), or something else (use sRGB).
+ */
+// #define V4L2_MAP_COLORSPACE_DEFAULT(is_sdtv, is_hdtv)
+// 	((is_sdtv) ? V4L2_COLORSPACE_SMPTE170M :
+// 	 ((is_hdtv) ? V4L2_COLORSPACE_REC709 : V4L2_COLORSPACE_SRGB))
+
+/** enum v4l2_xfer_func */
+public static final int
+	/*
+	 * Mapping of V4L2_XFER_FUNC_DEFAULT to actual transfer functions
+	 * for the various colorspaces:
+	 *
+	 * V4L2_COLORSPACE_SMPTE170M, V4L2_COLORSPACE_470_SYSTEM_M,
+	 * V4L2_COLORSPACE_470_SYSTEM_BG, V4L2_COLORSPACE_REC709 and
+	 * V4L2_COLORSPACE_BT2020: V4L2_XFER_FUNC_709
+	 *
+	 * V4L2_COLORSPACE_SRGB, V4L2_COLORSPACE_JPEG: V4L2_XFER_FUNC_SRGB
+	 *
+	 * V4L2_COLORSPACE_OPRGB: V4L2_XFER_FUNC_OPRGB
+	 *
+	 * V4L2_COLORSPACE_SMPTE240M: V4L2_XFER_FUNC_SMPTE240M
+	 *
+	 * V4L2_COLORSPACE_RAW: V4L2_XFER_FUNC_NONE
+	 *
+	 * V4L2_COLORSPACE_DCI_P3: V4L2_XFER_FUNC_DCI_P3
+	 */
+	V4L2_XFER_FUNC_DEFAULT     = 0,
+	V4L2_XFER_FUNC_709         = 1,
+	V4L2_XFER_FUNC_SRGB        = 2,
+	V4L2_XFER_FUNC_OPRGB       = 3,
+	V4L2_XFER_FUNC_SMPTE240M   = 4,
+	V4L2_XFER_FUNC_NONE        = 5,
+	V4L2_XFER_FUNC_DCI_P3      = 6,
+	V4L2_XFER_FUNC_SMPTE2084   = 7;
+
+/*
+ * Determine how XFER_FUNC_DEFAULT should map to a proper transfer function.
+ * This depends on the colorspace.
+ */
+// #define V4L2_MAP_XFER_FUNC_DEFAULT(colsp)
+// 	((colsp) == V4L2_COLORSPACE_OPRGB ? V4L2_XFER_FUNC_OPRGB :
+// 	 ((colsp) == V4L2_COLORSPACE_SMPTE240M ? V4L2_XFER_FUNC_SMPTE240M :
+// 	  ((colsp) == V4L2_COLORSPACE_DCI_P3 ? V4L2_XFER_FUNC_DCI_P3 :
+// 	   ((colsp) == V4L2_COLORSPACE_RAW ? V4L2_XFER_FUNC_NONE :
+// 	    ((colsp) == V4L2_COLORSPACE_SRGB || (colsp) == V4L2_COLORSPACE_JPEG ?
+// 	     V4L2_XFER_FUNC_SRGB : V4L2_XFER_FUNC_709)))))
+
+/** enum v4l2_ycbcr_encoding */
+public static final int
+	/*
+	 * Mapping of V4L2_YCBCR_ENC_DEFAULT to actual encodings for the
+	 * various colorspaces:
+	 *
+	 * V4L2_COLORSPACE_SMPTE170M, V4L2_COLORSPACE_470_SYSTEM_M,
+	 * V4L2_COLORSPACE_470_SYSTEM_BG, V4L2_COLORSPACE_SRGB,
+	 * V4L2_COLORSPACE_OPRGB and V4L2_COLORSPACE_JPEG: V4L2_YCBCR_ENC_601
+	 *
+	 * V4L2_COLORSPACE_REC709 and V4L2_COLORSPACE_DCI_P3: V4L2_YCBCR_ENC_709
+	 *
+	 * V4L2_COLORSPACE_BT2020: V4L2_YCBCR_ENC_BT2020
+	 *
+	 * V4L2_COLORSPACE_SMPTE240M: V4L2_YCBCR_ENC_SMPTE240M
+	 */
+	V4L2_YCBCR_ENC_DEFAULT        = 0,
+
+	/* ITU-R 601 -- SDTV */
+	V4L2_YCBCR_ENC_601            = 1,
+
+	/* Rec. 709 -- HDTV */
+	V4L2_YCBCR_ENC_709            = 2,
+
+	/* ITU-R 601/EN 61966-2-4 Extended Gamut -- SDTV */
+	V4L2_YCBCR_ENC_XV601          = 3,
+
+	/* Rec. 709/EN 61966-2-4 Extended Gamut -- HDTV */
+	V4L2_YCBCR_ENC_XV709          = 4,
+
+// #ifndef __KERNEL__
+	/*
+	 * sYCC (Y'CbCr encoding of sRGB), identical to ENC_601. It was added
+	 * originally due to a misunderstanding of the sYCC standard. It should
+	 * not be used, instead use V4L2_YCBCR_ENC_601.
+	 */
+	V4L2_YCBCR_ENC_SYCC           = 5,
+// #endif
+
+	/* BT.2020 Non-constant Luminance Y'CbCr */
+	V4L2_YCBCR_ENC_BT2020         = 6,
+
+	/* BT.2020 Constant Luminance Y'CbcCrc */
+	V4L2_YCBCR_ENC_BT2020_CONST_LUM = 7,
+
+	/* SMPTE 240M -- Obsolete HDTV */
+	V4L2_YCBCR_ENC_SMPTE240M      = 8;
+
+/*
+ * enum v4l2_hsv_encoding values should not collide with the ones from
+ * enum v4l2_ycbcr_encoding.
+ */
+/** enum v4l2_hsv_encoding */
+public static final int
+
+	/* Hue mapped to 0 - 179 */
+	V4L2_HSV_ENC_180		 = 128,
+
+	/* Hue mapped to 0-255 */
+	V4L2_HSV_ENC_256		 = 129;
+
+/*
+ * Determine how YCBCR_ENC_DEFAULT should map to a proper Y'CbCr encoding.
+ * This depends on the colorspace.
+ */
+// #define V4L2_MAP_YCBCR_ENC_DEFAULT(colsp)
+// 	(((colsp) == V4L2_COLORSPACE_REC709 ||
+// 	  (colsp) == V4L2_COLORSPACE_DCI_P3) ? V4L2_YCBCR_ENC_709 :
+// 	 ((colsp) == V4L2_COLORSPACE_BT2020 ? V4L2_YCBCR_ENC_BT2020 :
+// 	  ((colsp) == V4L2_COLORSPACE_SMPTE240M ? V4L2_YCBCR_ENC_SMPTE240M :
+// 	   V4L2_YCBCR_ENC_601)))
+
+/** enum v4l2_quantization */
+public static final int
+	/*
+	 * The default for R'G'B' quantization is always full range, except
+	 * for the BT2020 colorspace. For Y'CbCr the quantization is always
+	 * limited range, except for COLORSPACE_JPEG: this is full range.
+	 */
+	V4L2_QUANTIZATION_DEFAULT     = 0,
+	V4L2_QUANTIZATION_FULL_RANGE  = 1,
+	V4L2_QUANTIZATION_LIM_RANGE   = 2;
+
+/*
+ * Determine how QUANTIZATION_DEFAULT should map to a proper quantization.
+ * This depends on whether the image is RGB or not, the colorspace and the
+ * Y'CbCr encoding.
+ */
+// #define V4L2_MAP_QUANTIZATION_DEFAULT(is_rgb_or_hsv, colsp, ycbcr_enc)
+// 	(((is_rgb_or_hsv) && (colsp) == V4L2_COLORSPACE_BT2020) ?
+// 	 V4L2_QUANTIZATION_LIM_RANGE :
+// 	 (((is_rgb_or_hsv) || (colsp) == V4L2_COLORSPACE_JPEG) ?
+// 	 V4L2_QUANTIZATION_FULL_RANGE : V4L2_QUANTIZATION_LIM_RANGE))
+
+/*
+ * Deprecated names for opRGB colorspace (IEC 61966-2-5)
+ *
+ * WARNING: Please don't use these deprecated defines in your code, as
+ * there is a chance we have to remove them in the future.
+ */
+// #ifndef __KERNEL__
+public static final int V4L2_COLORSPACE_ADOBERGB = V4L2_COLORSPACE_OPRGB;
+public static final int V4L2_XFER_FUNC_ADOBERGB =  V4L2_XFER_FUNC_OPRGB;
+// #endif
+
+/** enum v4l2_priority */
+public static final int
+	V4L2_PRIORITY_UNSET       = 0,  /* not initialized */
+	V4L2_PRIORITY_BACKGROUND  = 1,
+	V4L2_PRIORITY_INTERACTIVE = 2,
+	V4L2_PRIORITY_RECORD      = 3,
+	V4L2_PRIORITY_DEFAULT     = V4L2_PRIORITY_INTERACTIVE;
+
+public static class v4l2_rect extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_rect() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_rect(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_rect(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_rect position(long position) {
+        return (v4l2_rect)super.position(position);
+    }
+
+	public native @Cast("__s32") int left(); public native v4l2_rect left(int left);
+	public native @Cast("__s32") int top(); public native v4l2_rect top(int top);
+	public native @Cast("__u32") int width(); public native v4l2_rect width(int width);
+	public native @Cast("__u32") int height(); public native v4l2_rect height(int height);
+}
+
+public static class v4l2_fract extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_fract() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_fract(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_fract(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_fract position(long position) {
+        return (v4l2_fract)super.position(position);
+    }
+
+	public native @Cast("__u32") int numerator(); public native v4l2_fract numerator(int numerator);
+	public native @Cast("__u32") int denominator(); public native v4l2_fract denominator(int denominator);
+}
+
+/**
+  * struct v4l2_capability - Describes V4L2 device caps returned by VIDIOC_QUERYCAP
+  *
+  * \driver:	   name of the driver module (e.g. "bttv")
+  * \card:	   name of the card (e.g. "Hauppauge WinTV")
+  * \bus_info:	   name of the bus (e.g. "PCI:" + pci_name(pci_dev) )
+  * @version :	   KERNEL_VERSION
+  * \capabilities: capabilities of the physical device as a whole
+  * \device_caps:  capabilities accessed via this particular device (node)
+  * \reserved:	   reserved fields for future extensions
+  */
+public static class v4l2_capability extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_capability() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_capability(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_capability(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_capability position(long position) {
+        return (v4l2_capability)super.position(position);
+    }
+
+	public native @Cast("__u8") short driver(int i); public native v4l2_capability driver(int i, short driver);
+	@MemberGetter public native @Cast("__u8*") ShortPointer driver();
+	public native @Cast("__u8") short card(int i); public native v4l2_capability card(int i, short card);
+	@MemberGetter public native @Cast("__u8*") ShortPointer card();
+	public native @Cast("__u8") short bus_info(int i); public native v4l2_capability bus_info(int i, short bus_info);
+	@MemberGetter public native @Cast("__u8*") ShortPointer bus_info();
+	public native @Cast("__u32") int version(); public native v4l2_capability version(int version);
+	public native @Cast("__u32") int capabilities(); public native v4l2_capability capabilities(int capabilities);
+	public native @Cast("__u32") int device_caps(); public native v4l2_capability device_caps(int device_caps);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_capability reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+}
+
+/* Values for 'capabilities' field */
+public static final int V4L2_CAP_VIDEO_CAPTURE =		0x00000001;  /* Is a video capture device */
+public static final int V4L2_CAP_VIDEO_OUTPUT =		0x00000002;  /* Is a video output device */
+public static final int V4L2_CAP_VIDEO_OVERLAY =		0x00000004;  /* Can do video overlay */
+public static final int V4L2_CAP_VBI_CAPTURE =		0x00000010;  /* Is a raw VBI capture device */
+public static final int V4L2_CAP_VBI_OUTPUT =		0x00000020;  /* Is a raw VBI output device */
+public static final int V4L2_CAP_SLICED_VBI_CAPTURE =	0x00000040;  /* Is a sliced VBI capture device */
+public static final int V4L2_CAP_SLICED_VBI_OUTPUT =	0x00000080;  /* Is a sliced VBI output device */
+public static final int V4L2_CAP_RDS_CAPTURE =		0x00000100;  /* RDS data capture */
+public static final int V4L2_CAP_VIDEO_OUTPUT_OVERLAY =	0x00000200;  /* Can do video output overlay */
+public static final int V4L2_CAP_HW_FREQ_SEEK =		0x00000400;  /* Can do hardware frequency seek  */
+public static final int V4L2_CAP_RDS_OUTPUT =		0x00000800;  /* Is an RDS encoder */
+
+/* Is a video capture device that supports multiplanar formats */
+public static final int V4L2_CAP_VIDEO_CAPTURE_MPLANE =	0x00001000;
+/* Is a video output device that supports multiplanar formats */
+public static final int V4L2_CAP_VIDEO_OUTPUT_MPLANE =	0x00002000;
+/* Is a video mem-to-mem device that supports multiplanar formats */
+public static final int V4L2_CAP_VIDEO_M2M_MPLANE =	0x00004000;
+/* Is a video mem-to-mem device */
+public static final int V4L2_CAP_VIDEO_M2M =		0x00008000;
+
+public static final int V4L2_CAP_TUNER =			0x00010000;  /* has a tuner */
+public static final int V4L2_CAP_AUDIO =			0x00020000;  /* has audio support */
+public static final int V4L2_CAP_RADIO =			0x00040000;  /* is a radio device */
+public static final int V4L2_CAP_MODULATOR =		0x00080000;  /* has a modulator */
+
+public static final int V4L2_CAP_SDR_CAPTURE =		0x00100000;  /* Is a SDR capture device */
+public static final int V4L2_CAP_EXT_PIX_FORMAT =		0x00200000;  /* Supports the extended pixel format */
+public static final int V4L2_CAP_SDR_OUTPUT =		0x00400000;  /* Is a SDR output device */
+public static final int V4L2_CAP_META_CAPTURE =		0x00800000;  /* Is a metadata capture device */
+
+public static final int V4L2_CAP_READWRITE =              0x01000000;  /* read/write systemcalls */
+public static final int V4L2_CAP_ASYNCIO =                0x02000000;  /* async I/O */
+public static final int V4L2_CAP_STREAMING =              0x04000000;  /* streaming I/O ioctls */
+public static final int V4L2_CAP_META_OUTPUT =		0x08000000;  /* Is a metadata output device */
+
+public static final int V4L2_CAP_TOUCH =                  0x10000000;  /* Is a touch device */
+
+public static final int V4L2_CAP_DEVICE_CAPS =            0x80000000;  /* sets device capabilities field */
+
+/*
+ *	V I D E O   I M A G E   F O R M A T
+ */
+public static class v4l2_pix_format extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_pix_format() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_pix_format(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_pix_format(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_pix_format position(long position) {
+        return (v4l2_pix_format)super.position(position);
+    }
+
+	public native @Cast("__u32") int width(); public native v4l2_pix_format width(int width);
+	public native @Cast("__u32") int height(); public native v4l2_pix_format height(int height);
+	public native @Cast("__u32") int pixelformat(); public native v4l2_pix_format pixelformat(int pixelformat);
+	public native @Cast("__u32") int field(); public native v4l2_pix_format field(int field);		/* enum v4l2_field */
+	public native @Cast("__u32") int bytesperline(); public native v4l2_pix_format bytesperline(int bytesperline);	/* for padding, zero if unused */
+	public native @Cast("__u32") int sizeimage(); public native v4l2_pix_format sizeimage(int sizeimage);
+	public native @Cast("__u32") int colorspace(); public native v4l2_pix_format colorspace(int colorspace);	/* enum v4l2_colorspace */
+	public native @Cast("__u32") int priv(); public native v4l2_pix_format priv(int priv);		/* private data, depends on pixelformat */
+	public native @Cast("__u32") int flags(); public native v4l2_pix_format flags(int flags);		/* format flags (V4L2_PIX_FMT_FLAG_*) */
+		/* enum v4l2_ycbcr_encoding */
+		public native @Cast("__u32") int ycbcr_enc(); public native v4l2_pix_format ycbcr_enc(int ycbcr_enc);
+		/* enum v4l2_hsv_encoding */
+		public native @Cast("__u32") int hsv_enc(); public native v4l2_pix_format hsv_enc(int hsv_enc);
+	public native @Cast("__u32") int quantization(); public native v4l2_pix_format quantization(int quantization);	/* enum v4l2_quantization */
+	public native @Cast("__u32") int xfer_func(); public native v4l2_pix_format xfer_func(int xfer_func);	/* enum v4l2_xfer_func */
+}
+
+/*      Pixel format         FOURCC                          depth  Description  */
+
+/* RGB formats */
+public static native @MemberGetter int V4L2_PIX_FMT_RGB332();
+public static final int V4L2_PIX_FMT_RGB332 = V4L2_PIX_FMT_RGB332(); /*  8  RGB-3-3-2     */
+public static native @MemberGetter int V4L2_PIX_FMT_RGB444();
+public static final int V4L2_PIX_FMT_RGB444 = V4L2_PIX_FMT_RGB444(); /* 16  xxxxrrrr ggggbbbb */
+public static native @MemberGetter int V4L2_PIX_FMT_ARGB444();
+public static final int V4L2_PIX_FMT_ARGB444 = V4L2_PIX_FMT_ARGB444(); /* 16  aaaarrrr ggggbbbb */
+public static native @MemberGetter int V4L2_PIX_FMT_XRGB444();
+public static final int V4L2_PIX_FMT_XRGB444 = V4L2_PIX_FMT_XRGB444(); /* 16  xxxxrrrr ggggbbbb */
+public static native @MemberGetter int V4L2_PIX_FMT_RGB555();
+public static final int V4L2_PIX_FMT_RGB555 = V4L2_PIX_FMT_RGB555(); /* 16  RGB-5-5-5     */
+public static native @MemberGetter int V4L2_PIX_FMT_ARGB555();
+public static final int V4L2_PIX_FMT_ARGB555 = V4L2_PIX_FMT_ARGB555(); /* 16  ARGB-1-5-5-5  */
+public static native @MemberGetter int V4L2_PIX_FMT_XRGB555();
+public static final int V4L2_PIX_FMT_XRGB555 = V4L2_PIX_FMT_XRGB555(); /* 16  XRGB-1-5-5-5  */
+public static native @MemberGetter int V4L2_PIX_FMT_RGB565();
+public static final int V4L2_PIX_FMT_RGB565 = V4L2_PIX_FMT_RGB565(); /* 16  RGB-5-6-5     */
+public static native @MemberGetter int V4L2_PIX_FMT_RGB555X();
+public static final int V4L2_PIX_FMT_RGB555X = V4L2_PIX_FMT_RGB555X(); /* 16  RGB-5-5-5 BE  */
+public static native @MemberGetter int V4L2_PIX_FMT_ARGB555X();
+public static final int V4L2_PIX_FMT_ARGB555X = V4L2_PIX_FMT_ARGB555X(); /* 16  ARGB-5-5-5 BE */
+public static native @MemberGetter int V4L2_PIX_FMT_XRGB555X();
+public static final int V4L2_PIX_FMT_XRGB555X = V4L2_PIX_FMT_XRGB555X(); /* 16  XRGB-5-5-5 BE */
+public static native @MemberGetter int V4L2_PIX_FMT_RGB565X();
+public static final int V4L2_PIX_FMT_RGB565X = V4L2_PIX_FMT_RGB565X(); /* 16  RGB-5-6-5 BE  */
+public static native @MemberGetter int V4L2_PIX_FMT_BGR666();
+public static final int V4L2_PIX_FMT_BGR666 = V4L2_PIX_FMT_BGR666(); /* 18  BGR-6-6-6	  */
+public static native @MemberGetter int V4L2_PIX_FMT_BGR24();
+public static final int V4L2_PIX_FMT_BGR24 = V4L2_PIX_FMT_BGR24(); /* 24  BGR-8-8-8     */
+public static native @MemberGetter int V4L2_PIX_FMT_RGB24();
+public static final int V4L2_PIX_FMT_RGB24 = V4L2_PIX_FMT_RGB24(); /* 24  RGB-8-8-8     */
+public static native @MemberGetter int V4L2_PIX_FMT_BGR32();
+public static final int V4L2_PIX_FMT_BGR32 = V4L2_PIX_FMT_BGR32(); /* 32  BGR-8-8-8-8   */
+public static native @MemberGetter int V4L2_PIX_FMT_ABGR32();
+public static final int V4L2_PIX_FMT_ABGR32 = V4L2_PIX_FMT_ABGR32(); /* 32  BGRA-8-8-8-8  */
+public static native @MemberGetter int V4L2_PIX_FMT_XBGR32();
+public static final int V4L2_PIX_FMT_XBGR32 = V4L2_PIX_FMT_XBGR32(); /* 32  BGRX-8-8-8-8  */
+public static native @MemberGetter int V4L2_PIX_FMT_RGB32();
+public static final int V4L2_PIX_FMT_RGB32 = V4L2_PIX_FMT_RGB32(); /* 32  RGB-8-8-8-8   */
+public static native @MemberGetter int V4L2_PIX_FMT_ARGB32();
+public static final int V4L2_PIX_FMT_ARGB32 = V4L2_PIX_FMT_ARGB32(); /* 32  ARGB-8-8-8-8  */
+public static native @MemberGetter int V4L2_PIX_FMT_XRGB32();
+public static final int V4L2_PIX_FMT_XRGB32 = V4L2_PIX_FMT_XRGB32(); /* 32  XRGB-8-8-8-8  */
+
+/* Grey formats */
+public static native @MemberGetter int V4L2_PIX_FMT_GREY();
+public static final int V4L2_PIX_FMT_GREY = V4L2_PIX_FMT_GREY(); /*  8  Greyscale     */
+public static native @MemberGetter int V4L2_PIX_FMT_Y4();
+public static final int V4L2_PIX_FMT_Y4 = V4L2_PIX_FMT_Y4(); /*  4  Greyscale     */
+public static native @MemberGetter int V4L2_PIX_FMT_Y6();
+public static final int V4L2_PIX_FMT_Y6 = V4L2_PIX_FMT_Y6(); /*  6  Greyscale     */
+public static native @MemberGetter int V4L2_PIX_FMT_Y10();
+public static final int V4L2_PIX_FMT_Y10 = V4L2_PIX_FMT_Y10(); /* 10  Greyscale     */
+public static native @MemberGetter int V4L2_PIX_FMT_Y12();
+public static final int V4L2_PIX_FMT_Y12 = V4L2_PIX_FMT_Y12(); /* 12  Greyscale     */
+public static native @MemberGetter int V4L2_PIX_FMT_Y16();
+public static final int V4L2_PIX_FMT_Y16 = V4L2_PIX_FMT_Y16(); /* 16  Greyscale     */
+public static native @MemberGetter int V4L2_PIX_FMT_Y16_BE();
+public static final int V4L2_PIX_FMT_Y16_BE = V4L2_PIX_FMT_Y16_BE(); /* 16  Greyscale BE  */
+
+/* Grey bit-packed formats */
+public static native @MemberGetter int V4L2_PIX_FMT_Y10BPACK();
+public static final int V4L2_PIX_FMT_Y10BPACK = V4L2_PIX_FMT_Y10BPACK(); /* 10  Greyscale bit-packed */
+public static native @MemberGetter int V4L2_PIX_FMT_Y10P();
+public static final int V4L2_PIX_FMT_Y10P = V4L2_PIX_FMT_Y10P(); /* 10  Greyscale, MIPI RAW10 packed */
+
+/* Palette formats */
+public static native @MemberGetter int V4L2_PIX_FMT_PAL8();
+public static final int V4L2_PIX_FMT_PAL8 = V4L2_PIX_FMT_PAL8(); /*  8  8-bit palette */
+
+/* Chrominance formats */
+public static native @MemberGetter int V4L2_PIX_FMT_UV8();
+public static final int V4L2_PIX_FMT_UV8 = V4L2_PIX_FMT_UV8(); /*  8  UV 4:4 */
+
+/* Luminance+Chrominance formats */
+public static native @MemberGetter int V4L2_PIX_FMT_YUYV();
+public static final int V4L2_PIX_FMT_YUYV = V4L2_PIX_FMT_YUYV(); /* 16  YUV 4:2:2     */
+public static native @MemberGetter int V4L2_PIX_FMT_YYUV();
+public static final int V4L2_PIX_FMT_YYUV = V4L2_PIX_FMT_YYUV(); /* 16  YUV 4:2:2     */
+public static native @MemberGetter int V4L2_PIX_FMT_YVYU();
+public static final int V4L2_PIX_FMT_YVYU = V4L2_PIX_FMT_YVYU(); /* 16 YVU 4:2:2 */
+public static native @MemberGetter int V4L2_PIX_FMT_UYVY();
+public static final int V4L2_PIX_FMT_UYVY = V4L2_PIX_FMT_UYVY(); /* 16  YUV 4:2:2     */
+public static native @MemberGetter int V4L2_PIX_FMT_VYUY();
+public static final int V4L2_PIX_FMT_VYUY = V4L2_PIX_FMT_VYUY(); /* 16  YUV 4:2:2     */
+public static native @MemberGetter int V4L2_PIX_FMT_Y41P();
+public static final int V4L2_PIX_FMT_Y41P = V4L2_PIX_FMT_Y41P(); /* 12  YUV 4:1:1     */
+public static native @MemberGetter int V4L2_PIX_FMT_YUV444();
+public static final int V4L2_PIX_FMT_YUV444 = V4L2_PIX_FMT_YUV444(); /* 16  xxxxyyyy uuuuvvvv */
+public static native @MemberGetter int V4L2_PIX_FMT_YUV555();
+public static final int V4L2_PIX_FMT_YUV555 = V4L2_PIX_FMT_YUV555(); /* 16  YUV-5-5-5     */
+public static native @MemberGetter int V4L2_PIX_FMT_YUV565();
+public static final int V4L2_PIX_FMT_YUV565 = V4L2_PIX_FMT_YUV565(); /* 16  YUV-5-6-5     */
+public static native @MemberGetter int V4L2_PIX_FMT_YUV32();
+public static final int V4L2_PIX_FMT_YUV32 = V4L2_PIX_FMT_YUV32(); /* 32  YUV-8-8-8-8   */
+public static native @MemberGetter int V4L2_PIX_FMT_HI240();
+public static final int V4L2_PIX_FMT_HI240 = V4L2_PIX_FMT_HI240(); /*  8  8-bit color   */
+public static native @MemberGetter int V4L2_PIX_FMT_HM12();
+public static final int V4L2_PIX_FMT_HM12 = V4L2_PIX_FMT_HM12(); /*  8  YUV 4:2:0 16x16 macroblocks */
+public static native @MemberGetter int V4L2_PIX_FMT_M420();
+public static final int V4L2_PIX_FMT_M420 = V4L2_PIX_FMT_M420(); /* 12  YUV 4:2:0 2 lines y, 1 line uv interleaved */
+
+/* two planes -- one Y, one Cr + Cb interleaved  */
+public static native @MemberGetter int V4L2_PIX_FMT_NV12();
+public static final int V4L2_PIX_FMT_NV12 = V4L2_PIX_FMT_NV12(); /* 12  Y/CbCr 4:2:0  */
+public static native @MemberGetter int V4L2_PIX_FMT_NV21();
+public static final int V4L2_PIX_FMT_NV21 = V4L2_PIX_FMT_NV21(); /* 12  Y/CrCb 4:2:0  */
+public static native @MemberGetter int V4L2_PIX_FMT_NV16();
+public static final int V4L2_PIX_FMT_NV16 = V4L2_PIX_FMT_NV16(); /* 16  Y/CbCr 4:2:2  */
+public static native @MemberGetter int V4L2_PIX_FMT_NV61();
+public static final int V4L2_PIX_FMT_NV61 = V4L2_PIX_FMT_NV61(); /* 16  Y/CrCb 4:2:2  */
+public static native @MemberGetter int V4L2_PIX_FMT_NV24();
+public static final int V4L2_PIX_FMT_NV24 = V4L2_PIX_FMT_NV24(); /* 24  Y/CbCr 4:4:4  */
+public static native @MemberGetter int V4L2_PIX_FMT_NV42();
+public static final int V4L2_PIX_FMT_NV42 = V4L2_PIX_FMT_NV42(); /* 24  Y/CrCb 4:4:4  */
+
+/* two non contiguous planes - one Y, one Cr + Cb interleaved  */
+public static native @MemberGetter int V4L2_PIX_FMT_NV12M();
+public static final int V4L2_PIX_FMT_NV12M = V4L2_PIX_FMT_NV12M(); /* 12  Y/CbCr 4:2:0  */
+public static native @MemberGetter int V4L2_PIX_FMT_NV21M();
+public static final int V4L2_PIX_FMT_NV21M = V4L2_PIX_FMT_NV21M(); /* 21  Y/CrCb 4:2:0  */
+public static native @MemberGetter int V4L2_PIX_FMT_NV16M();
+public static final int V4L2_PIX_FMT_NV16M = V4L2_PIX_FMT_NV16M(); /* 16  Y/CbCr 4:2:2  */
+public static native @MemberGetter int V4L2_PIX_FMT_NV61M();
+public static final int V4L2_PIX_FMT_NV61M = V4L2_PIX_FMT_NV61M(); /* 16  Y/CrCb 4:2:2  */
+public static native @MemberGetter int V4L2_PIX_FMT_NV12MT();
+public static final int V4L2_PIX_FMT_NV12MT = V4L2_PIX_FMT_NV12MT(); /* 12  Y/CbCr 4:2:0 64x32 macroblocks */
+public static native @MemberGetter int V4L2_PIX_FMT_NV12MT_16X16();
+public static final int V4L2_PIX_FMT_NV12MT_16X16 = V4L2_PIX_FMT_NV12MT_16X16(); /* 12  Y/CbCr 4:2:0 16x16 macroblocks */
+
+/* three planes - Y Cb, Cr */
+public static native @MemberGetter int V4L2_PIX_FMT_YUV410();
+public static final int V4L2_PIX_FMT_YUV410 = V4L2_PIX_FMT_YUV410(); /*  9  YUV 4:1:0     */
+public static native @MemberGetter int V4L2_PIX_FMT_YVU410();
+public static final int V4L2_PIX_FMT_YVU410 = V4L2_PIX_FMT_YVU410(); /*  9  YVU 4:1:0     */
+public static native @MemberGetter int V4L2_PIX_FMT_YUV411P();
+public static final int V4L2_PIX_FMT_YUV411P = V4L2_PIX_FMT_YUV411P(); /* 12  YVU411 planar */
+public static native @MemberGetter int V4L2_PIX_FMT_YUV420();
+public static final int V4L2_PIX_FMT_YUV420 = V4L2_PIX_FMT_YUV420(); /* 12  YUV 4:2:0     */
+public static native @MemberGetter int V4L2_PIX_FMT_YVU420();
+public static final int V4L2_PIX_FMT_YVU420 = V4L2_PIX_FMT_YVU420(); /* 12  YVU 4:2:0     */
+public static native @MemberGetter int V4L2_PIX_FMT_YUV422P();
+public static final int V4L2_PIX_FMT_YUV422P = V4L2_PIX_FMT_YUV422P(); /* 16  YVU422 planar */
+
+/* three non contiguous planes - Y, Cb, Cr */
+public static native @MemberGetter int V4L2_PIX_FMT_YUV420M();
+public static final int V4L2_PIX_FMT_YUV420M = V4L2_PIX_FMT_YUV420M(); /* 12  YUV420 planar */
+public static native @MemberGetter int V4L2_PIX_FMT_YVU420M();
+public static final int V4L2_PIX_FMT_YVU420M = V4L2_PIX_FMT_YVU420M(); /* 12  YVU420 planar */
+public static native @MemberGetter int V4L2_PIX_FMT_YUV422M();
+public static final int V4L2_PIX_FMT_YUV422M = V4L2_PIX_FMT_YUV422M(); /* 16  YUV422 planar */
+public static native @MemberGetter int V4L2_PIX_FMT_YVU422M();
+public static final int V4L2_PIX_FMT_YVU422M = V4L2_PIX_FMT_YVU422M(); /* 16  YVU422 planar */
+public static native @MemberGetter int V4L2_PIX_FMT_YUV444M();
+public static final int V4L2_PIX_FMT_YUV444M = V4L2_PIX_FMT_YUV444M(); /* 24  YUV444 planar */
+public static native @MemberGetter int V4L2_PIX_FMT_YVU444M();
+public static final int V4L2_PIX_FMT_YVU444M = V4L2_PIX_FMT_YVU444M(); /* 24  YVU444 planar */
+
+/* Bayer formats - see http://www.siliconimaging.com/RGB%20Bayer.htm */
+public static native @MemberGetter int V4L2_PIX_FMT_SBGGR8();
+public static final int V4L2_PIX_FMT_SBGGR8 = V4L2_PIX_FMT_SBGGR8(); /*  8  BGBG.. GRGR.. */
+public static native @MemberGetter int V4L2_PIX_FMT_SGBRG8();
+public static final int V4L2_PIX_FMT_SGBRG8 = V4L2_PIX_FMT_SGBRG8(); /*  8  GBGB.. RGRG.. */
+public static native @MemberGetter int V4L2_PIX_FMT_SGRBG8();
+public static final int V4L2_PIX_FMT_SGRBG8 = V4L2_PIX_FMT_SGRBG8(); /*  8  GRGR.. BGBG.. */
+public static native @MemberGetter int V4L2_PIX_FMT_SRGGB8();
+public static final int V4L2_PIX_FMT_SRGGB8 = V4L2_PIX_FMT_SRGGB8(); /*  8  RGRG.. GBGB.. */
+public static native @MemberGetter int V4L2_PIX_FMT_SBGGR10();
+public static final int V4L2_PIX_FMT_SBGGR10 = V4L2_PIX_FMT_SBGGR10(); /* 10  BGBG.. GRGR.. */
+public static native @MemberGetter int V4L2_PIX_FMT_SGBRG10();
+public static final int V4L2_PIX_FMT_SGBRG10 = V4L2_PIX_FMT_SGBRG10(); /* 10  GBGB.. RGRG.. */
+public static native @MemberGetter int V4L2_PIX_FMT_SGRBG10();
+public static final int V4L2_PIX_FMT_SGRBG10 = V4L2_PIX_FMT_SGRBG10(); /* 10  GRGR.. BGBG.. */
+public static native @MemberGetter int V4L2_PIX_FMT_SRGGB10();
+public static final int V4L2_PIX_FMT_SRGGB10 = V4L2_PIX_FMT_SRGGB10(); /* 10  RGRG.. GBGB.. */
+	/* 10bit raw bayer packed, 5 bytes for every 4 pixels */
+public static native @MemberGetter int V4L2_PIX_FMT_SBGGR10P();
+public static final int V4L2_PIX_FMT_SBGGR10P = V4L2_PIX_FMT_SBGGR10P();
+public static native @MemberGetter int V4L2_PIX_FMT_SGBRG10P();
+public static final int V4L2_PIX_FMT_SGBRG10P = V4L2_PIX_FMT_SGBRG10P();
+public static native @MemberGetter int V4L2_PIX_FMT_SGRBG10P();
+public static final int V4L2_PIX_FMT_SGRBG10P = V4L2_PIX_FMT_SGRBG10P();
+public static native @MemberGetter int V4L2_PIX_FMT_SRGGB10P();
+public static final int V4L2_PIX_FMT_SRGGB10P = V4L2_PIX_FMT_SRGGB10P();
+	/* 10bit raw bayer a-law compressed to 8 bits */
+public static native @MemberGetter int V4L2_PIX_FMT_SBGGR10ALAW8();
+public static final int V4L2_PIX_FMT_SBGGR10ALAW8 = V4L2_PIX_FMT_SBGGR10ALAW8();
+public static native @MemberGetter int V4L2_PIX_FMT_SGBRG10ALAW8();
+public static final int V4L2_PIX_FMT_SGBRG10ALAW8 = V4L2_PIX_FMT_SGBRG10ALAW8();
+public static native @MemberGetter int V4L2_PIX_FMT_SGRBG10ALAW8();
+public static final int V4L2_PIX_FMT_SGRBG10ALAW8 = V4L2_PIX_FMT_SGRBG10ALAW8();
+public static native @MemberGetter int V4L2_PIX_FMT_SRGGB10ALAW8();
+public static final int V4L2_PIX_FMT_SRGGB10ALAW8 = V4L2_PIX_FMT_SRGGB10ALAW8();
+	/* 10bit raw bayer DPCM compressed to 8 bits */
+public static native @MemberGetter int V4L2_PIX_FMT_SBGGR10DPCM8();
+public static final int V4L2_PIX_FMT_SBGGR10DPCM8 = V4L2_PIX_FMT_SBGGR10DPCM8();
+public static native @MemberGetter int V4L2_PIX_FMT_SGBRG10DPCM8();
+public static final int V4L2_PIX_FMT_SGBRG10DPCM8 = V4L2_PIX_FMT_SGBRG10DPCM8();
+public static native @MemberGetter int V4L2_PIX_FMT_SGRBG10DPCM8();
+public static final int V4L2_PIX_FMT_SGRBG10DPCM8 = V4L2_PIX_FMT_SGRBG10DPCM8();
+public static native @MemberGetter int V4L2_PIX_FMT_SRGGB10DPCM8();
+public static final int V4L2_PIX_FMT_SRGGB10DPCM8 = V4L2_PIX_FMT_SRGGB10DPCM8();
+public static native @MemberGetter int V4L2_PIX_FMT_SBGGR12();
+public static final int V4L2_PIX_FMT_SBGGR12 = V4L2_PIX_FMT_SBGGR12(); /* 12  BGBG.. GRGR.. */
+public static native @MemberGetter int V4L2_PIX_FMT_SGBRG12();
+public static final int V4L2_PIX_FMT_SGBRG12 = V4L2_PIX_FMT_SGBRG12(); /* 12  GBGB.. RGRG.. */
+public static native @MemberGetter int V4L2_PIX_FMT_SGRBG12();
+public static final int V4L2_PIX_FMT_SGRBG12 = V4L2_PIX_FMT_SGRBG12(); /* 12  GRGR.. BGBG.. */
+public static native @MemberGetter int V4L2_PIX_FMT_SRGGB12();
+public static final int V4L2_PIX_FMT_SRGGB12 = V4L2_PIX_FMT_SRGGB12(); /* 12  RGRG.. GBGB.. */
+	/* 12bit raw bayer packed, 6 bytes for every 4 pixels */
+public static native @MemberGetter int V4L2_PIX_FMT_SBGGR12P();
+public static final int V4L2_PIX_FMT_SBGGR12P = V4L2_PIX_FMT_SBGGR12P();
+public static native @MemberGetter int V4L2_PIX_FMT_SGBRG12P();
+public static final int V4L2_PIX_FMT_SGBRG12P = V4L2_PIX_FMT_SGBRG12P();
+public static native @MemberGetter int V4L2_PIX_FMT_SGRBG12P();
+public static final int V4L2_PIX_FMT_SGRBG12P = V4L2_PIX_FMT_SGRBG12P();
+public static native @MemberGetter int V4L2_PIX_FMT_SRGGB12P();
+public static final int V4L2_PIX_FMT_SRGGB12P = V4L2_PIX_FMT_SRGGB12P();
+	/* 14bit raw bayer packed, 7 bytes for every 4 pixels */
+public static native @MemberGetter int V4L2_PIX_FMT_SBGGR14P();
+public static final int V4L2_PIX_FMT_SBGGR14P = V4L2_PIX_FMT_SBGGR14P();
+public static native @MemberGetter int V4L2_PIX_FMT_SGBRG14P();
+public static final int V4L2_PIX_FMT_SGBRG14P = V4L2_PIX_FMT_SGBRG14P();
+public static native @MemberGetter int V4L2_PIX_FMT_SGRBG14P();
+public static final int V4L2_PIX_FMT_SGRBG14P = V4L2_PIX_FMT_SGRBG14P();
+public static native @MemberGetter int V4L2_PIX_FMT_SRGGB14P();
+public static final int V4L2_PIX_FMT_SRGGB14P = V4L2_PIX_FMT_SRGGB14P();
+public static native @MemberGetter int V4L2_PIX_FMT_SBGGR16();
+public static final int V4L2_PIX_FMT_SBGGR16 = V4L2_PIX_FMT_SBGGR16(); /* 16  BGBG.. GRGR.. */
+public static native @MemberGetter int V4L2_PIX_FMT_SGBRG16();
+public static final int V4L2_PIX_FMT_SGBRG16 = V4L2_PIX_FMT_SGBRG16(); /* 16  GBGB.. RGRG.. */
+public static native @MemberGetter int V4L2_PIX_FMT_SGRBG16();
+public static final int V4L2_PIX_FMT_SGRBG16 = V4L2_PIX_FMT_SGRBG16(); /* 16  GRGR.. BGBG.. */
+public static native @MemberGetter int V4L2_PIX_FMT_SRGGB16();
+public static final int V4L2_PIX_FMT_SRGGB16 = V4L2_PIX_FMT_SRGGB16(); /* 16  RGRG.. GBGB.. */
+
+/* HSV formats */
+public static native @MemberGetter int V4L2_PIX_FMT_HSV24();
+public static final int V4L2_PIX_FMT_HSV24 = V4L2_PIX_FMT_HSV24();
+public static native @MemberGetter int V4L2_PIX_FMT_HSV32();
+public static final int V4L2_PIX_FMT_HSV32 = V4L2_PIX_FMT_HSV32();
+
+/* compressed formats */
+public static native @MemberGetter int V4L2_PIX_FMT_MJPEG();
+public static final int V4L2_PIX_FMT_MJPEG = V4L2_PIX_FMT_MJPEG(); /* Motion-JPEG   */
+public static native @MemberGetter int V4L2_PIX_FMT_JPEG();
+public static final int V4L2_PIX_FMT_JPEG = V4L2_PIX_FMT_JPEG(); /* JFIF JPEG     */
+public static native @MemberGetter int V4L2_PIX_FMT_DV();
+public static final int V4L2_PIX_FMT_DV = V4L2_PIX_FMT_DV(); /* 1394          */
+public static native @MemberGetter int V4L2_PIX_FMT_MPEG();
+public static final int V4L2_PIX_FMT_MPEG = V4L2_PIX_FMT_MPEG(); /* MPEG-1/2/4 Multiplexed */
+public static native @MemberGetter int V4L2_PIX_FMT_H264();
+public static final int V4L2_PIX_FMT_H264 = V4L2_PIX_FMT_H264(); /* H264 with start codes */
+public static native @MemberGetter int V4L2_PIX_FMT_H264_NO_SC();
+public static final int V4L2_PIX_FMT_H264_NO_SC = V4L2_PIX_FMT_H264_NO_SC(); /* H264 without start codes */
+public static native @MemberGetter int V4L2_PIX_FMT_H264_MVC();
+public static final int V4L2_PIX_FMT_H264_MVC = V4L2_PIX_FMT_H264_MVC(); /* H264 MVC */
+public static native @MemberGetter int V4L2_PIX_FMT_H263();
+public static final int V4L2_PIX_FMT_H263 = V4L2_PIX_FMT_H263(); /* H263          */
+public static native @MemberGetter int V4L2_PIX_FMT_MPEG1();
+public static final int V4L2_PIX_FMT_MPEG1 = V4L2_PIX_FMT_MPEG1(); /* MPEG-1 ES     */
+public static native @MemberGetter int V4L2_PIX_FMT_MPEG2();
+public static final int V4L2_PIX_FMT_MPEG2 = V4L2_PIX_FMT_MPEG2(); /* MPEG-2 ES     */
+public static native @MemberGetter int V4L2_PIX_FMT_MPEG2_SLICE();
+public static final int V4L2_PIX_FMT_MPEG2_SLICE = V4L2_PIX_FMT_MPEG2_SLICE(); /* MPEG-2 parsed slice data */
+public static native @MemberGetter int V4L2_PIX_FMT_MPEG4();
+public static final int V4L2_PIX_FMT_MPEG4 = V4L2_PIX_FMT_MPEG4(); /* MPEG-4 part 2 ES */
+public static native @MemberGetter int V4L2_PIX_FMT_XVID();
+public static final int V4L2_PIX_FMT_XVID = V4L2_PIX_FMT_XVID(); /* Xvid           */
+public static native @MemberGetter int V4L2_PIX_FMT_VC1_ANNEX_G();
+public static final int V4L2_PIX_FMT_VC1_ANNEX_G = V4L2_PIX_FMT_VC1_ANNEX_G(); /* SMPTE 421M Annex G compliant stream */
+public static native @MemberGetter int V4L2_PIX_FMT_VC1_ANNEX_L();
+public static final int V4L2_PIX_FMT_VC1_ANNEX_L = V4L2_PIX_FMT_VC1_ANNEX_L(); /* SMPTE 421M Annex L compliant stream */
+public static native @MemberGetter int V4L2_PIX_FMT_VP8();
+public static final int V4L2_PIX_FMT_VP8 = V4L2_PIX_FMT_VP8(); /* VP8 */
+public static native @MemberGetter int V4L2_PIX_FMT_VP9();
+public static final int V4L2_PIX_FMT_VP9 = V4L2_PIX_FMT_VP9(); /* VP9 */
+public static native @MemberGetter int V4L2_PIX_FMT_HEVC();
+public static final int V4L2_PIX_FMT_HEVC = V4L2_PIX_FMT_HEVC(); /* HEVC aka H.265 */
+public static native @MemberGetter int V4L2_PIX_FMT_FWHT();
+public static final int V4L2_PIX_FMT_FWHT = V4L2_PIX_FMT_FWHT(); /* Fast Walsh Hadamard Transform (vicodec) */
+
+/*  Vendor-specific formats   */
+public static native @MemberGetter int V4L2_PIX_FMT_CPIA1();
+public static final int V4L2_PIX_FMT_CPIA1 = V4L2_PIX_FMT_CPIA1(); /* cpia1 YUV */
+public static native @MemberGetter int V4L2_PIX_FMT_WNVA();
+public static final int V4L2_PIX_FMT_WNVA = V4L2_PIX_FMT_WNVA(); /* Winnov hw compress */
+public static native @MemberGetter int V4L2_PIX_FMT_SN9C10X();
+public static final int V4L2_PIX_FMT_SN9C10X = V4L2_PIX_FMT_SN9C10X(); /* SN9C10x compression */
+public static native @MemberGetter int V4L2_PIX_FMT_SN9C20X_I420();
+public static final int V4L2_PIX_FMT_SN9C20X_I420 = V4L2_PIX_FMT_SN9C20X_I420(); /* SN9C20x YUV 4:2:0 */
+public static native @MemberGetter int V4L2_PIX_FMT_PWC1();
+public static final int V4L2_PIX_FMT_PWC1 = V4L2_PIX_FMT_PWC1(); /* pwc older webcam */
+public static native @MemberGetter int V4L2_PIX_FMT_PWC2();
+public static final int V4L2_PIX_FMT_PWC2 = V4L2_PIX_FMT_PWC2(); /* pwc newer webcam */
+public static native @MemberGetter int V4L2_PIX_FMT_ET61X251();
+public static final int V4L2_PIX_FMT_ET61X251 = V4L2_PIX_FMT_ET61X251(); /* ET61X251 compression */
+public static native @MemberGetter int V4L2_PIX_FMT_SPCA501();
+public static final int V4L2_PIX_FMT_SPCA501 = V4L2_PIX_FMT_SPCA501(); /* YUYV per line */
+public static native @MemberGetter int V4L2_PIX_FMT_SPCA505();
+public static final int V4L2_PIX_FMT_SPCA505 = V4L2_PIX_FMT_SPCA505(); /* YYUV per line */
+public static native @MemberGetter int V4L2_PIX_FMT_SPCA508();
+public static final int V4L2_PIX_FMT_SPCA508 = V4L2_PIX_FMT_SPCA508(); /* YUVY per line */
+public static native @MemberGetter int V4L2_PIX_FMT_SPCA561();
+public static final int V4L2_PIX_FMT_SPCA561 = V4L2_PIX_FMT_SPCA561(); /* compressed GBRG bayer */
+public static native @MemberGetter int V4L2_PIX_FMT_PAC207();
+public static final int V4L2_PIX_FMT_PAC207 = V4L2_PIX_FMT_PAC207(); /* compressed BGGR bayer */
+public static native @MemberGetter int V4L2_PIX_FMT_MR97310A();
+public static final int V4L2_PIX_FMT_MR97310A = V4L2_PIX_FMT_MR97310A(); /* compressed BGGR bayer */
+public static native @MemberGetter int V4L2_PIX_FMT_JL2005BCD();
+public static final int V4L2_PIX_FMT_JL2005BCD = V4L2_PIX_FMT_JL2005BCD(); /* compressed RGGB bayer */
+public static native @MemberGetter int V4L2_PIX_FMT_SN9C2028();
+public static final int V4L2_PIX_FMT_SN9C2028 = V4L2_PIX_FMT_SN9C2028(); /* compressed GBRG bayer */
+public static native @MemberGetter int V4L2_PIX_FMT_SQ905C();
+public static final int V4L2_PIX_FMT_SQ905C = V4L2_PIX_FMT_SQ905C(); /* compressed RGGB bayer */
+public static native @MemberGetter int V4L2_PIX_FMT_PJPG();
+public static final int V4L2_PIX_FMT_PJPG = V4L2_PIX_FMT_PJPG(); /* Pixart 73xx JPEG */
+public static native @MemberGetter int V4L2_PIX_FMT_OV511();
+public static final int V4L2_PIX_FMT_OV511 = V4L2_PIX_FMT_OV511(); /* ov511 JPEG */
+public static native @MemberGetter int V4L2_PIX_FMT_OV518();
+public static final int V4L2_PIX_FMT_OV518 = V4L2_PIX_FMT_OV518(); /* ov518 JPEG */
+public static native @MemberGetter int V4L2_PIX_FMT_STV0680();
+public static final int V4L2_PIX_FMT_STV0680 = V4L2_PIX_FMT_STV0680(); /* stv0680 bayer */
+public static native @MemberGetter int V4L2_PIX_FMT_TM6000();
+public static final int V4L2_PIX_FMT_TM6000 = V4L2_PIX_FMT_TM6000(); /* tm5600/tm60x0 */
+public static native @MemberGetter int V4L2_PIX_FMT_CIT_YYVYUY();
+public static final int V4L2_PIX_FMT_CIT_YYVYUY = V4L2_PIX_FMT_CIT_YYVYUY(); /* one line of Y then 1 line of VYUY */
+public static native @MemberGetter int V4L2_PIX_FMT_KONICA420();
+public static final int V4L2_PIX_FMT_KONICA420 = V4L2_PIX_FMT_KONICA420(); /* YUV420 planar in blocks of 256 pixels */
+public static native @MemberGetter int V4L2_PIX_FMT_JPGL();
+public static final int V4L2_PIX_FMT_JPGL = V4L2_PIX_FMT_JPGL(); /* JPEG-Lite */
+public static native @MemberGetter int V4L2_PIX_FMT_SE401();
+public static final int V4L2_PIX_FMT_SE401 = V4L2_PIX_FMT_SE401(); /* se401 janggu compressed rgb */
+public static native @MemberGetter int V4L2_PIX_FMT_S5C_UYVY_JPG();
+public static final int V4L2_PIX_FMT_S5C_UYVY_JPG = V4L2_PIX_FMT_S5C_UYVY_JPG(); /* S5C73M3 interleaved UYVY/JPEG */
+public static native @MemberGetter int V4L2_PIX_FMT_Y8I();
+public static final int V4L2_PIX_FMT_Y8I = V4L2_PIX_FMT_Y8I(); /* Greyscale 8-bit L/R interleaved */
+public static native @MemberGetter int V4L2_PIX_FMT_Y12I();
+public static final int V4L2_PIX_FMT_Y12I = V4L2_PIX_FMT_Y12I(); /* Greyscale 12-bit L/R interleaved */
+public static native @MemberGetter int V4L2_PIX_FMT_Z16();
+public static final int V4L2_PIX_FMT_Z16 = V4L2_PIX_FMT_Z16(); /* Depth data 16-bit */
+public static native @MemberGetter int V4L2_PIX_FMT_MT21C();
+public static final int V4L2_PIX_FMT_MT21C = V4L2_PIX_FMT_MT21C(); /* Mediatek compressed block mode  */
+public static native @MemberGetter int V4L2_PIX_FMT_INZI();
+public static final int V4L2_PIX_FMT_INZI = V4L2_PIX_FMT_INZI(); /* Intel Planar Greyscale 10-bit and Depth 16-bit */
+public static native @MemberGetter int V4L2_PIX_FMT_SUNXI_TILED_NV12();
+public static final int V4L2_PIX_FMT_SUNXI_TILED_NV12 = V4L2_PIX_FMT_SUNXI_TILED_NV12(); /* Sunxi Tiled NV12 Format */
+public static native @MemberGetter int V4L2_PIX_FMT_CNF4();
+public static final int V4L2_PIX_FMT_CNF4 = V4L2_PIX_FMT_CNF4(); /* Intel 4-bit packed depth confidence information */
+
+/* 10bit raw bayer packed, 32 bytes for every 25 pixels, last LSB 6 bits unused */
+public static native @MemberGetter int V4L2_PIX_FMT_IPU3_SBGGR10();
+public static final int V4L2_PIX_FMT_IPU3_SBGGR10 = V4L2_PIX_FMT_IPU3_SBGGR10(); /* IPU3 packed 10-bit BGGR bayer */
+public static native @MemberGetter int V4L2_PIX_FMT_IPU3_SGBRG10();
+public static final int V4L2_PIX_FMT_IPU3_SGBRG10 = V4L2_PIX_FMT_IPU3_SGBRG10(); /* IPU3 packed 10-bit GBRG bayer */
+public static native @MemberGetter int V4L2_PIX_FMT_IPU3_SGRBG10();
+public static final int V4L2_PIX_FMT_IPU3_SGRBG10 = V4L2_PIX_FMT_IPU3_SGRBG10(); /* IPU3 packed 10-bit GRBG bayer */
+public static native @MemberGetter int V4L2_PIX_FMT_IPU3_SRGGB10();
+public static final int V4L2_PIX_FMT_IPU3_SRGGB10 = V4L2_PIX_FMT_IPU3_SRGGB10(); /* IPU3 packed 10-bit RGGB bayer */
+
+/* SDR formats - used only for Software Defined Radio devices */
+public static native @MemberGetter int V4L2_SDR_FMT_CU8();
+public static final int V4L2_SDR_FMT_CU8 = V4L2_SDR_FMT_CU8(); /* IQ u8 */
+public static native @MemberGetter int V4L2_SDR_FMT_CU16LE();
+public static final int V4L2_SDR_FMT_CU16LE = V4L2_SDR_FMT_CU16LE(); /* IQ u16le */
+public static native @MemberGetter int V4L2_SDR_FMT_CS8();
+public static final int V4L2_SDR_FMT_CS8 = V4L2_SDR_FMT_CS8(); /* complex s8 */
+public static native @MemberGetter int V4L2_SDR_FMT_CS14LE();
+public static final int V4L2_SDR_FMT_CS14LE = V4L2_SDR_FMT_CS14LE(); /* complex s14le */
+public static native @MemberGetter int V4L2_SDR_FMT_RU12LE();
+public static final int V4L2_SDR_FMT_RU12LE = V4L2_SDR_FMT_RU12LE(); /* real u12le */
+public static native @MemberGetter int V4L2_SDR_FMT_PCU16BE();
+public static final int V4L2_SDR_FMT_PCU16BE = V4L2_SDR_FMT_PCU16BE(); /* planar complex u16be */
+public static native @MemberGetter int V4L2_SDR_FMT_PCU18BE();
+public static final int V4L2_SDR_FMT_PCU18BE = V4L2_SDR_FMT_PCU18BE(); /* planar complex u18be */
+public static native @MemberGetter int V4L2_SDR_FMT_PCU20BE();
+public static final int V4L2_SDR_FMT_PCU20BE = V4L2_SDR_FMT_PCU20BE(); /* planar complex u20be */
+
+/* Touch formats - used for Touch devices */
+public static native @MemberGetter int V4L2_TCH_FMT_DELTA_TD16();
+public static final int V4L2_TCH_FMT_DELTA_TD16 = V4L2_TCH_FMT_DELTA_TD16(); /* 16-bit signed deltas */
+public static native @MemberGetter int V4L2_TCH_FMT_DELTA_TD08();
+public static final int V4L2_TCH_FMT_DELTA_TD08 = V4L2_TCH_FMT_DELTA_TD08(); /* 8-bit signed deltas */
+public static native @MemberGetter int V4L2_TCH_FMT_TU16();
+public static final int V4L2_TCH_FMT_TU16 = V4L2_TCH_FMT_TU16(); /* 16-bit unsigned touch data */
+public static native @MemberGetter int V4L2_TCH_FMT_TU08();
+public static final int V4L2_TCH_FMT_TU08 = V4L2_TCH_FMT_TU08(); /* 8-bit unsigned touch data */
+
+/* Meta-data formats */
+public static native @MemberGetter int V4L2_META_FMT_VSP1_HGO();
+public static final int V4L2_META_FMT_VSP1_HGO = V4L2_META_FMT_VSP1_HGO(); /* R-Car VSP1 1-D Histogram */
+public static native @MemberGetter int V4L2_META_FMT_VSP1_HGT();
+public static final int V4L2_META_FMT_VSP1_HGT = V4L2_META_FMT_VSP1_HGT(); /* R-Car VSP1 2-D Histogram */
+public static native @MemberGetter int V4L2_META_FMT_UVC();
+public static final int V4L2_META_FMT_UVC = V4L2_META_FMT_UVC(); /* UVC Payload Header metadata */
+public static native @MemberGetter int V4L2_META_FMT_D4XX();
+public static final int V4L2_META_FMT_D4XX = V4L2_META_FMT_D4XX(); /* D4XX Payload Header metadata */
+
+/* priv field value to indicates that subsequent fields are valid. */
+public static final int V4L2_PIX_FMT_PRIV_MAGIC =		0xfeedcafe;
+
+/* Flags */
+public static final int V4L2_PIX_FMT_FLAG_PREMUL_ALPHA =	0x00000001;
+
+/*
+ *	F O R M A T   E N U M E R A T I O N
+ */
+public static class v4l2_fmtdesc extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_fmtdesc() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_fmtdesc(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_fmtdesc(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_fmtdesc position(long position) {
+        return (v4l2_fmtdesc)super.position(position);
+    }
+
+	public native @Cast("__u32") int index(); public native v4l2_fmtdesc index(int index);             /* Format number      */
+	public native @Cast("__u32") int type(); public native v4l2_fmtdesc type(int type);              /* enum v4l2_buf_type */
+	public native @Cast("__u32") int flags(); public native v4l2_fmtdesc flags(int flags);
+	public native @Cast("__u8") short description(int i); public native v4l2_fmtdesc description(int i, short description);
+	@MemberGetter public native @Cast("__u8*") ShortPointer description();   /* Description string */
+	public native @Cast("__u32") int pixelformat(); public native v4l2_fmtdesc pixelformat(int pixelformat);       /* Format fourcc      */
+	public native @Cast("__u32") int reserved(int i); public native v4l2_fmtdesc reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+}
+
+public static final int V4L2_FMT_FLAG_COMPRESSED = 0x0001;
+public static final int V4L2_FMT_FLAG_EMULATED =   0x0002;
+
+	/* Frame Size and frame rate enumeration */
+/*
+ *	F R A M E   S I Z E   E N U M E R A T I O N
+ */
+/** enum v4l2_frmsizetypes */
+public static final int
+	V4L2_FRMSIZE_TYPE_DISCRETE	 = 1,
+	V4L2_FRMSIZE_TYPE_CONTINUOUS	 = 2,
+	V4L2_FRMSIZE_TYPE_STEPWISE	 = 3;
+
+public static class v4l2_frmsize_discrete extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_frmsize_discrete() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_frmsize_discrete(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_frmsize_discrete(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_frmsize_discrete position(long position) {
+        return (v4l2_frmsize_discrete)super.position(position);
+    }
+
+	public native @Cast("__u32") int width(); public native v4l2_frmsize_discrete width(int width);		/* Frame width [pixel] */
+	public native @Cast("__u32") int height(); public native v4l2_frmsize_discrete height(int height);		/* Frame height [pixel] */
+}
+
+public static class v4l2_frmsize_stepwise extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_frmsize_stepwise() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_frmsize_stepwise(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_frmsize_stepwise(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_frmsize_stepwise position(long position) {
+        return (v4l2_frmsize_stepwise)super.position(position);
+    }
+
+	public native @Cast("__u32") int min_width(); public native v4l2_frmsize_stepwise min_width(int min_width);	/* Minimum frame width [pixel] */
+	public native @Cast("__u32") int max_width(); public native v4l2_frmsize_stepwise max_width(int max_width);	/* Maximum frame width [pixel] */
+	public native @Cast("__u32") int step_width(); public native v4l2_frmsize_stepwise step_width(int step_width);	/* Frame width step size [pixel] */
+	public native @Cast("__u32") int min_height(); public native v4l2_frmsize_stepwise min_height(int min_height);	/* Minimum frame height [pixel] */
+	public native @Cast("__u32") int max_height(); public native v4l2_frmsize_stepwise max_height(int max_height);	/* Maximum frame height [pixel] */
+	public native @Cast("__u32") int step_height(); public native v4l2_frmsize_stepwise step_height(int step_height);	/* Frame height step size [pixel] */
+}
+
+public static class v4l2_frmsizeenum extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_frmsizeenum() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_frmsizeenum(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_frmsizeenum(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_frmsizeenum position(long position) {
+        return (v4l2_frmsizeenum)super.position(position);
+    }
+
+	public native @Cast("__u32") int index(); public native v4l2_frmsizeenum index(int index);		/* Frame size number */
+	public native @Cast("__u32") int pixel_format(); public native v4l2_frmsizeenum pixel_format(int pixel_format);	/* Pixel format */
+	public native @Cast("__u32") int type(); public native v4l2_frmsizeenum type(int type);		/* Frame size type the device supports. */					/* Frame size */
+		public native @ByRef v4l2_frmsize_discrete discrete(); public native v4l2_frmsizeenum discrete(v4l2_frmsize_discrete discrete);
+		public native @ByRef v4l2_frmsize_stepwise stepwise(); public native v4l2_frmsizeenum stepwise(v4l2_frmsize_stepwise stepwise);
+
+	public native @Cast("__u32") int reserved(int i); public native v4l2_frmsizeenum reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();			/* Reserved space for future use */
+}
+
+/*
+ *	F R A M E   R A T E   E N U M E R A T I O N
+ */
+/** enum v4l2_frmivaltypes */
+public static final int
+	V4L2_FRMIVAL_TYPE_DISCRETE	 = 1,
+	V4L2_FRMIVAL_TYPE_CONTINUOUS	 = 2,
+	V4L2_FRMIVAL_TYPE_STEPWISE	 = 3;
+
+public static class v4l2_frmival_stepwise extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_frmival_stepwise() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_frmival_stepwise(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_frmival_stepwise(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_frmival_stepwise position(long position) {
+        return (v4l2_frmival_stepwise)super.position(position);
+    }
+
+	public native @ByRef v4l2_fract min(); public native v4l2_frmival_stepwise min(v4l2_fract min);		/* Minimum frame interval [s] */
+	public native @ByRef v4l2_fract max(); public native v4l2_frmival_stepwise max(v4l2_fract max);		/* Maximum frame interval [s] */
+	public native @ByRef v4l2_fract step(); public native v4l2_frmival_stepwise step(v4l2_fract step);		/* Frame interval step size [s] */
+}
+
+public static class v4l2_frmivalenum extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_frmivalenum() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_frmivalenum(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_frmivalenum(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_frmivalenum position(long position) {
+        return (v4l2_frmivalenum)super.position(position);
+    }
+
+	public native @Cast("__u32") int index(); public native v4l2_frmivalenum index(int index);		/* Frame format index */
+	public native @Cast("__u32") int pixel_format(); public native v4l2_frmivalenum pixel_format(int pixel_format);	/* Pixel format */
+	public native @Cast("__u32") int width(); public native v4l2_frmivalenum width(int width);		/* Frame width */
+	public native @Cast("__u32") int height(); public native v4l2_frmivalenum height(int height);		/* Frame height */
+	public native @Cast("__u32") int type(); public native v4l2_frmivalenum type(int type);		/* Frame interval type the device supports. */					/* Frame interval */
+		public native @ByRef v4l2_fract discrete(); public native v4l2_frmivalenum discrete(v4l2_fract discrete);
+		public native @ByRef v4l2_frmival_stepwise stepwise(); public native v4l2_frmivalenum stepwise(v4l2_frmival_stepwise stepwise);
+
+	public native @Cast("__u32") int reserved(int i); public native v4l2_frmivalenum reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();			/* Reserved space for future use */
+}
+
+/*
+ *	T I M E C O D E
+ */
+public static class v4l2_timecode extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_timecode() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_timecode(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_timecode(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_timecode position(long position) {
+        return (v4l2_timecode)super.position(position);
+    }
+
+	public native @Cast("__u32") int type(); public native v4l2_timecode type(int type);
+	public native @Cast("__u32") int flags(); public native v4l2_timecode flags(int flags);
+	public native @Cast("__u8") short frames(); public native v4l2_timecode frames(short frames);
+	public native @Cast("__u8") short seconds(); public native v4l2_timecode seconds(short seconds);
+	public native @Cast("__u8") short minutes(); public native v4l2_timecode minutes(short minutes);
+	public native @Cast("__u8") short hours(); public native v4l2_timecode hours(short hours);
+	public native @Cast("__u8") short userbits(int i); public native v4l2_timecode userbits(int i, short userbits);
+	@MemberGetter public native @Cast("__u8*") ShortPointer userbits();
+}
+
+/*  Type  */
+public static final int V4L2_TC_TYPE_24FPS =		1;
+public static final int V4L2_TC_TYPE_25FPS =		2;
+public static final int V4L2_TC_TYPE_30FPS =		3;
+public static final int V4L2_TC_TYPE_50FPS =		4;
+public static final int V4L2_TC_TYPE_60FPS =		5;
+
+/*  Flags  */
+public static final int V4L2_TC_FLAG_DROPFRAME =		0x0001; /* "drop-frame" mode */
+public static final int V4L2_TC_FLAG_COLORFRAME =		0x0002;
+public static final int V4L2_TC_USERBITS_field =		0x000C;
+public static final int V4L2_TC_USERBITS_USERDEFINED =	0x0000;
+public static final int V4L2_TC_USERBITS_8BITCHARS =	0x0008;
+/* The above is based on SMPTE timecodes */
+
+public static class v4l2_jpegcompression extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_jpegcompression() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_jpegcompression(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_jpegcompression(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_jpegcompression position(long position) {
+        return (v4l2_jpegcompression)super.position(position);
+    }
+
+	public native int quality(); public native v4l2_jpegcompression quality(int quality);
+
+	public native int APPn(); public native v4l2_jpegcompression APPn(int APPn);              /* Number of APP segment to be written,
+				 * must be 0..15 */
+	public native int APP_len(); public native v4l2_jpegcompression APP_len(int APP_len);           /* Length of data in JPEG APPn segment */
+	public native @Cast("char") byte APP_data(int i); public native v4l2_jpegcompression APP_data(int i, byte APP_data);
+	@MemberGetter public native @Cast("char*") BytePointer APP_data();      /* Data in the JPEG APPn segment. */
+
+	public native int COM_len(); public native v4l2_jpegcompression COM_len(int COM_len);           /* Length of data in JPEG COM segment */
+	public native @Cast("char") byte COM_data(int i); public native v4l2_jpegcompression COM_data(int i, byte COM_data);
+	@MemberGetter public native @Cast("char*") BytePointer COM_data();      /* Data in JPEG COM segment */
+
+	public native @Cast("__u32") int jpeg_markers(); public native v4l2_jpegcompression jpeg_markers(int jpeg_markers);     /* Which markers should go into the JPEG
+				 * output. Unless you exactly know what
+				 * you do, leave them untouched.
+				 * Including less markers will make the
+				 * resulting code smaller, but there will
+				 * be fewer applications which can read it.
+				 * The presence of the APP and COM marker
+				 * is influenced by APP_len and COM_len
+				 * ONLY, not by this property! */
+
+public static final int V4L2_JPEG_MARKER_DHT = (1<<3);    /* Define Huffman Tables */
+public static final int V4L2_JPEG_MARKER_DQT = (1<<4);    /* Define Quantization Tables */
+public static final int V4L2_JPEG_MARKER_DRI = (1<<5);    /* Define Restart Interval */
+public static final int V4L2_JPEG_MARKER_COM = (1<<6);    /* Comment segment */
+public static final int V4L2_JPEG_MARKER_APP = (1<<7);    /* App segment, driver will
+					* always use APP0 */
+}
+
+/*
+ *	M E M O R Y - M A P P I N G   B U F F E R S
+ */
+public static class v4l2_requestbuffers extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_requestbuffers() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_requestbuffers(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_requestbuffers(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_requestbuffers position(long position) {
+        return (v4l2_requestbuffers)super.position(position);
+    }
+
+	public native @Cast("__u32") int count(); public native v4l2_requestbuffers count(int count);
+	public native @Cast("__u32") int type(); public native v4l2_requestbuffers type(int type);		/* enum v4l2_buf_type */
+	public native @Cast("__u32") int memory(); public native v4l2_requestbuffers memory(int memory);		/* enum v4l2_memory */
+	public native @Cast("__u32") int capabilities(); public native v4l2_requestbuffers capabilities(int capabilities);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_requestbuffers reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+}
+
+/* capabilities for struct v4l2_requestbuffers and v4l2_create_buffers */
+public static final int V4L2_BUF_CAP_SUPPORTS_MMAP =	(1 << 0);
+public static final int V4L2_BUF_CAP_SUPPORTS_USERPTR =	(1 << 1);
+public static final int V4L2_BUF_CAP_SUPPORTS_DMABUF =	(1 << 2);
+public static final int V4L2_BUF_CAP_SUPPORTS_REQUESTS =	(1 << 3);
+public static final int V4L2_BUF_CAP_SUPPORTS_ORPHANED_BUFS = (1 << 4);
+
+/**
+ * struct v4l2_plane - plane info for multi-planar buffers
+ * \bytesused:		number of bytes occupied by data in the plane (payload)
+ * \length:		size of this plane (NOT the payload) in bytes
+ * \mem_offset:		when memory in the associated struct v4l2_buffer is
+ *			V4L2_MEMORY_MMAP, equals the offset from the start of
+ *			the device memory for this plane (or is a "cookie" that
+ *			should be passed to mmap() called on the video node)
+ * \u005Cuserptr:		when memory is V4L2_MEMORY_USERPTR, a userspace pointer
+ *			pointing to this plane
+ * \fd:			when memory is V4L2_MEMORY_DMABUF, a userspace file
+ *			descriptor associated with this plane
+ * \data_offset:	offset in the plane to the start of data; usually 0,
+ *			unless there is a header in front of the data
+ *
+ * Multi-planar buffers consist of one or more planes, e.g. an YCbCr buffer
+ * with two planes can have one plane for Y, and another for interleaved CbCr
+ * components. Each plane can reside in a separate memory buffer, or even in
+ * a completely separate memory node (e.g. in embedded devices).
+ */
+public static class v4l2_plane extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_plane() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_plane(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_plane(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_plane position(long position) {
+        return (v4l2_plane)super.position(position);
+    }
+
+	public native @Cast("__u32") int bytesused(); public native v4l2_plane bytesused(int bytesused);
+	public native @Cast("__u32") int length(); public native v4l2_plane length(int length);
+		@Name("m.mem_offset") public native @Cast("__u32") int m_mem_offset(); public native v4l2_plane m_mem_offset(int m_mem_offset);
+		@Name("m.userptr") public native @Cast("unsigned long") long m_userptr(); public native v4l2_plane m_userptr(long m_userptr);
+		@Name("m.fd") public native @Cast("__s32") int m_fd(); public native v4l2_plane m_fd(int m_fd);
+	public native @Cast("__u32") int data_offset(); public native v4l2_plane data_offset(int data_offset);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_plane reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+}
+
+/**
+ * struct v4l2_buffer - video buffer info
+ * \index:	id number of the buffer
+ * \type:	enum v4l2_buf_type; buffer type (type == *_MPLANE for
+ *		multiplanar buffers);
+ * \bytesused:	number of bytes occupied by data in the buffer (payload);
+ *		unused (set to 0) for multiplanar buffers
+ * \flags:	buffer informational flags
+ * \field:	enum v4l2_field; field order of the image in the buffer
+ * \timestamp:	frame timestamp
+ * \timecode:	frame timecode
+ * \sequence:	sequence count of this frame
+ * \memory:	enum v4l2_memory; the method, in which the actual video data is
+ *		passed
+ * \offset:	for non-multiplanar buffers with memory == V4L2_MEMORY_MMAP;
+ *		offset from the start of the device memory for this plane,
+ *		(or a "cookie" that should be passed to mmap() as offset)
+ * \u005Cuserptr:	for non-multiplanar buffers with memory == V4L2_MEMORY_USERPTR;
+ *		a userspace pointer pointing to this buffer
+ * \fd:		for non-multiplanar buffers with memory == V4L2_MEMORY_DMABUF;
+ *		a userspace file descriptor associated with this buffer
+ * \planes:	for multiplanar buffers; userspace pointer to the array of plane
+ *		info structs for this buffer
+ * \length:	size in bytes of the buffer (NOT its payload) for single-plane
+ *		buffers (when type != *_MPLANE); number of elements in the
+ *		planes array for multi-plane buffers
+ * \request_fd: fd of the request that this buffer should use
+ *
+ * Contains data exchanged by application and driver using one of the Streaming
+ * I/O methods.
+ */
+public static class v4l2_buffer extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_buffer() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_buffer(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_buffer(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_buffer position(long position) {
+        return (v4l2_buffer)super.position(position);
+    }
+
+	public native @Cast("__u32") int index(); public native v4l2_buffer index(int index);
+	public native @Cast("__u32") int type(); public native v4l2_buffer type(int type);
+	public native @Cast("__u32") int bytesused(); public native v4l2_buffer bytesused(int bytesused);
+	public native @Cast("__u32") int flags(); public native v4l2_buffer flags(int flags);
+	public native @Cast("__u32") int field(); public native v4l2_buffer field(int field);
+	public native @ByRef timeval timestamp(); public native v4l2_buffer timestamp(timeval timestamp);
+	public native @ByRef v4l2_timecode timecode(); public native v4l2_buffer timecode(v4l2_timecode timecode);
+	public native @Cast("__u32") int sequence(); public native v4l2_buffer sequence(int sequence);
+
+	/* memory location */
+	public native @Cast("__u32") int memory(); public native v4l2_buffer memory(int memory);
+		@Name("m.offset") public native @Cast("__u32") int m_offset(); public native v4l2_buffer m_offset(int m_offset);
+		@Name("m.userptr") public native @Cast("unsigned long") long m_userptr(); public native v4l2_buffer m_userptr(long m_userptr);
+		@Name("m.planes") public native v4l2_plane m_planes(); public native v4l2_buffer m_planes(v4l2_plane m_planes);
+		@Name("m.fd") public native @Cast("__s32") int m_fd(); public native v4l2_buffer m_fd(int m_fd);
+	public native @Cast("__u32") int length(); public native v4l2_buffer length(int length);
+	public native @Cast("__u32") int reserved2(); public native v4l2_buffer reserved2(int reserved2);
+		public native @Cast("__s32") int request_fd(); public native v4l2_buffer request_fd(int request_fd);
+		public native @Cast("__u32") int reserved(); public native v4l2_buffer reserved(int reserved);
+}
+
+/*  Flags for 'flags' field */
+/* Buffer is mapped (flag) */
+public static final int V4L2_BUF_FLAG_MAPPED =			0x00000001;
+/* Buffer is queued for processing */
+public static final int V4L2_BUF_FLAG_QUEUED =			0x00000002;
+/* Buffer is ready */
+public static final int V4L2_BUF_FLAG_DONE =			0x00000004;
+/* Image is a keyframe (I-frame) */
+public static final int V4L2_BUF_FLAG_KEYFRAME =			0x00000008;
+/* Image is a P-frame */
+public static final int V4L2_BUF_FLAG_PFRAME =			0x00000010;
+/* Image is a B-frame */
+public static final int V4L2_BUF_FLAG_BFRAME =			0x00000020;
+/* Buffer is ready, but the data contained within is corrupted. */
+public static final int V4L2_BUF_FLAG_ERROR =			0x00000040;
+/* Buffer is added to an unqueued request */
+public static final int V4L2_BUF_FLAG_IN_REQUEST =		0x00000080;
+/* timecode field is valid */
+public static final int V4L2_BUF_FLAG_TIMECODE =			0x00000100;
+/* Buffer is prepared for queuing */
+public static final int V4L2_BUF_FLAG_PREPARED =			0x00000400;
+/* Cache handling flags */
+public static final int V4L2_BUF_FLAG_NO_CACHE_INVALIDATE =	0x00000800;
+public static final int V4L2_BUF_FLAG_NO_CACHE_CLEAN =		0x00001000;
+/* Timestamp type */
+public static final int V4L2_BUF_FLAG_TIMESTAMP_MASK =		0x0000e000;
+public static final int V4L2_BUF_FLAG_TIMESTAMP_UNKNOWN =		0x00000000;
+public static final int V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC =	0x00002000;
+public static final int V4L2_BUF_FLAG_TIMESTAMP_COPY =		0x00004000;
+/* Timestamp sources. */
+public static final int V4L2_BUF_FLAG_TSTAMP_SRC_MASK =		0x00070000;
+public static final int V4L2_BUF_FLAG_TSTAMP_SRC_EOF =		0x00000000;
+public static final int V4L2_BUF_FLAG_TSTAMP_SRC_SOE =		0x00010000;
+/* mem2mem encoder/decoder */
+public static final int V4L2_BUF_FLAG_LAST =			0x00100000;
+/* request_fd is valid */
+public static final int V4L2_BUF_FLAG_REQUEST_FD =		0x00800000;
+
+/**
+ * struct v4l2_exportbuffer - export of video buffer as DMABUF file descriptor
+ *
+ * \index:	id number of the buffer
+ * \type:	enum v4l2_buf_type; buffer type (type == *_MPLANE for
+ *		multiplanar buffers);
+ * \plane:	index of the plane to be exported, 0 for single plane queues
+ * \flags:	flags for newly created file, currently only O_CLOEXEC is
+ *		supported, refer to manual of open syscall for more details
+ * \fd:		file descriptor associated with DMABUF (set by driver)
+ *
+ * Contains data used for exporting a video buffer as DMABUF file descriptor.
+ * The buffer is identified by a 'cookie' returned by VIDIOC_QUERYBUF
+ * (identical to the cookie used to mmap() the buffer to userspace). All
+ * reserved fields must be set to zero. The field reserved0 is expected to
+ * become a structure 'type' allowing an alternative layout of the structure
+ * content. Therefore this field should not be used for any other extensions.
+ */
+public static class v4l2_exportbuffer extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_exportbuffer() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_exportbuffer(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_exportbuffer(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_exportbuffer position(long position) {
+        return (v4l2_exportbuffer)super.position(position);
+    }
+
+	public native @Cast("__u32") int type(); public native v4l2_exportbuffer type(int type); /* enum v4l2_buf_type */
+	public native @Cast("__u32") int index(); public native v4l2_exportbuffer index(int index);
+	public native @Cast("__u32") int plane(); public native v4l2_exportbuffer plane(int plane);
+	public native @Cast("__u32") int flags(); public native v4l2_exportbuffer flags(int flags);
+	public native @Cast("__s32") int fd(); public native v4l2_exportbuffer fd(int fd);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_exportbuffer reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+}
+
+/*
+ *	O V E R L A Y   P R E V I E W
+ */
+public static class v4l2_framebuffer extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_framebuffer() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_framebuffer(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_framebuffer(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_framebuffer position(long position) {
+        return (v4l2_framebuffer)super.position(position);
+    }
+
+	public native @Cast("__u32") int capability(); public native v4l2_framebuffer capability(int capability);
+	public native @Cast("__u32") int flags(); public native v4l2_framebuffer flags(int flags);
+/* FIXME: in theory we should pass something like PCI device + memory
+ * region + offset instead of some physical address */
+	public native Pointer base(); public native v4l2_framebuffer base(Pointer base);
+		@Name("fmt.width") public native @Cast("__u32") int fmt_width(); public native v4l2_framebuffer fmt_width(int fmt_width);
+		@Name("fmt.height") public native @Cast("__u32") int fmt_height(); public native v4l2_framebuffer fmt_height(int fmt_height);
+		@Name("fmt.pixelformat") public native @Cast("__u32") int fmt_pixelformat(); public native v4l2_framebuffer fmt_pixelformat(int fmt_pixelformat);
+		@Name("fmt.field") public native @Cast("__u32") int fmt_field(); public native v4l2_framebuffer fmt_field(int fmt_field);		/* enum v4l2_field */
+		@Name("fmt.bytesperline") public native @Cast("__u32") int fmt_bytesperline(); public native v4l2_framebuffer fmt_bytesperline(int fmt_bytesperline);	/* for padding, zero if unused */
+		@Name("fmt.sizeimage") public native @Cast("__u32") int fmt_sizeimage(); public native v4l2_framebuffer fmt_sizeimage(int fmt_sizeimage);
+		@Name("fmt.colorspace") public native @Cast("__u32") int fmt_colorspace(); public native v4l2_framebuffer fmt_colorspace(int fmt_colorspace);	/* enum v4l2_colorspace */
+		@Name("fmt.priv") public native @Cast("__u32") int fmt_priv(); public native v4l2_framebuffer fmt_priv(int fmt_priv);		/* reserved field, set to 0 */
+}
+/*  Flags for the 'capability' field. Read only */
+public static final int V4L2_FBUF_CAP_EXTERNOVERLAY =	0x0001;
+public static final int V4L2_FBUF_CAP_CHROMAKEY =		0x0002;
+public static final int V4L2_FBUF_CAP_LIST_CLIPPING =     0x0004;
+public static final int V4L2_FBUF_CAP_BITMAP_CLIPPING =	0x0008;
+public static final int V4L2_FBUF_CAP_LOCAL_ALPHA =	0x0010;
+public static final int V4L2_FBUF_CAP_GLOBAL_ALPHA =	0x0020;
+public static final int V4L2_FBUF_CAP_LOCAL_INV_ALPHA =	0x0040;
+public static final int V4L2_FBUF_CAP_SRC_CHROMAKEY =	0x0080;
+/*  Flags for the 'flags' field. */
+public static final int V4L2_FBUF_FLAG_PRIMARY =		0x0001;
+public static final int V4L2_FBUF_FLAG_OVERLAY =		0x0002;
+public static final int V4L2_FBUF_FLAG_CHROMAKEY =	0x0004;
+public static final int V4L2_FBUF_FLAG_LOCAL_ALPHA =	0x0008;
+public static final int V4L2_FBUF_FLAG_GLOBAL_ALPHA =	0x0010;
+public static final int V4L2_FBUF_FLAG_LOCAL_INV_ALPHA =	0x0020;
+public static final int V4L2_FBUF_FLAG_SRC_CHROMAKEY =	0x0040;
+
+public static class v4l2_clip extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_clip() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_clip(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_clip(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_clip position(long position) {
+        return (v4l2_clip)super.position(position);
+    }
+
+	public native @ByRef v4l2_rect c(); public native v4l2_clip c(v4l2_rect c);
+	public native v4l2_clip next(); public native v4l2_clip next(v4l2_clip next);
+}
+
+public static class v4l2_window extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_window() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_window(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_window(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_window position(long position) {
+        return (v4l2_window)super.position(position);
+    }
+
+	public native @ByRef v4l2_rect w(); public native v4l2_window w(v4l2_rect w);
+	public native @Cast("__u32") int field(); public native v4l2_window field(int field);	 /* enum v4l2_field */
+	public native @Cast("__u32") int chromakey(); public native v4l2_window chromakey(int chromakey);
+	public native v4l2_clip clips(); public native v4l2_window clips(v4l2_clip clips);
+	public native @Cast("__u32") int clipcount(); public native v4l2_window clipcount(int clipcount);
+	public native Pointer bitmap(); public native v4l2_window bitmap(Pointer bitmap);
+	public native @Cast("__u8") short global_alpha(); public native v4l2_window global_alpha(short global_alpha);
+}
+
+/*
+ *	C A P T U R E   P A R A M E T E R S
+ */
+public static class v4l2_captureparm extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_captureparm() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_captureparm(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_captureparm(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_captureparm position(long position) {
+        return (v4l2_captureparm)super.position(position);
+    }
+
+	public native @Cast("__u32") int capability(); public native v4l2_captureparm capability(int capability);	  /*  Supported modes */
+	public native @Cast("__u32") int capturemode(); public native v4l2_captureparm capturemode(int capturemode);	  /*  Current mode */
+	public native @ByRef v4l2_fract timeperframe(); public native v4l2_captureparm timeperframe(v4l2_fract timeperframe);  /*  Time per frame in seconds */
+	public native @Cast("__u32") int extendedmode(); public native v4l2_captureparm extendedmode(int extendedmode);  /*  Driver-specific extensions */
+	public native @Cast("__u32") int readbuffers(); public native v4l2_captureparm readbuffers(int readbuffers);   /*  # of buffers for read */
+	public native @Cast("__u32") int reserved(int i); public native v4l2_captureparm reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+}
+
+/*  Flags for 'capability' and 'capturemode' fields */
+public static final int V4L2_MODE_HIGHQUALITY =	0x0001;	/*  High quality imaging mode */
+public static final int V4L2_CAP_TIMEPERFRAME =	0x1000;	/*  timeperframe field is supported */
+
+public static class v4l2_outputparm extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_outputparm() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_outputparm(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_outputparm(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_outputparm position(long position) {
+        return (v4l2_outputparm)super.position(position);
+    }
+
+	public native @Cast("__u32") int capability(); public native v4l2_outputparm capability(int capability);	 /*  Supported modes */
+	public native @Cast("__u32") int outputmode(); public native v4l2_outputparm outputmode(int outputmode);	 /*  Current mode */
+	public native @ByRef v4l2_fract timeperframe(); public native v4l2_outputparm timeperframe(v4l2_fract timeperframe); /*  Time per frame in seconds */
+	public native @Cast("__u32") int extendedmode(); public native v4l2_outputparm extendedmode(int extendedmode); /*  Driver-specific extensions */
+	public native @Cast("__u32") int writebuffers(); public native v4l2_outputparm writebuffers(int writebuffers); /*  # of buffers for write */
+	public native @Cast("__u32") int reserved(int i); public native v4l2_outputparm reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+}
+
+/*
+ *	I N P U T   I M A G E   C R O P P I N G
+ */
+public static class v4l2_cropcap extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_cropcap() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_cropcap(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_cropcap(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_cropcap position(long position) {
+        return (v4l2_cropcap)super.position(position);
+    }
+
+	public native @Cast("__u32") int type(); public native v4l2_cropcap type(int type);	/* enum v4l2_buf_type */
+	public native @ByRef v4l2_rect bounds(); public native v4l2_cropcap bounds(v4l2_rect bounds);
+	public native @ByRef v4l2_rect defrect(); public native v4l2_cropcap defrect(v4l2_rect defrect);
+	public native @ByRef v4l2_fract pixelaspect(); public native v4l2_cropcap pixelaspect(v4l2_fract pixelaspect);
+}
+
+public static class v4l2_crop extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_crop() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_crop(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_crop(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_crop position(long position) {
+        return (v4l2_crop)super.position(position);
+    }
+
+	public native @Cast("__u32") int type(); public native v4l2_crop type(int type);	/* enum v4l2_buf_type */
+	public native @ByRef v4l2_rect c(); public native v4l2_crop c(v4l2_rect c);
+}
+
+/**
+ * struct v4l2_selection - selection info
+ * \type:	buffer type (do not use *_MPLANE types)
+ * \target:	Selection target, used to choose one of possible rectangles;
+ *		defined in v4l2-common.h; V4L2_SEL_TGT_* .
+ * \flags:	constraints flags, defined in v4l2-common.h; V4L2_SEL_FLAG_*.
+ * \r:		coordinates of selection window
+ * \reserved:	for future use, rounds structure size to 64 bytes, set to zero
+ *
+ * Hardware may use multiple helper windows to process a video stream.
+ * The structure is used to exchange this selection areas between
+ * an application and a driver.
+ */
+public static class v4l2_selection extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_selection() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_selection(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_selection(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_selection position(long position) {
+        return (v4l2_selection)super.position(position);
+    }
+
+	public native @Cast("__u32") int type(); public native v4l2_selection type(int type);
+	public native @Cast("__u32") int target(); public native v4l2_selection target(int target);
+	public native @Cast("__u32") int flags(); public native v4l2_selection flags(int flags);
+	public native @ByRef v4l2_rect r(); public native v4l2_selection r(v4l2_rect r);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_selection reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+}
+
+
+/*
+ *      A N A L O G   V I D E O   S T A N D A R D
+ */
+
+/* one bit for each */
+public static final long V4L2_STD_PAL_B =          ((long)0x00000001);
+public static final long V4L2_STD_PAL_B1 =         ((long)0x00000002);
+public static final long V4L2_STD_PAL_G =          ((long)0x00000004);
+public static final long V4L2_STD_PAL_H =          ((long)0x00000008);
+public static final long V4L2_STD_PAL_I =          ((long)0x00000010);
+public static final long V4L2_STD_PAL_D =          ((long)0x00000020);
+public static final long V4L2_STD_PAL_D1 =         ((long)0x00000040);
+public static final long V4L2_STD_PAL_K =          ((long)0x00000080);
+
+public static final long V4L2_STD_PAL_M =          ((long)0x00000100);
+public static final long V4L2_STD_PAL_N =          ((long)0x00000200);
+public static final long V4L2_STD_PAL_Nc =         ((long)0x00000400);
+public static final long V4L2_STD_PAL_60 =         ((long)0x00000800);
+
+public static final long V4L2_STD_NTSC_M =         ((long)0x00001000);	/* BTSC */
+public static final long V4L2_STD_NTSC_M_JP =      ((long)0x00002000);	/* EIA-J */
+public static final long V4L2_STD_NTSC_443 =       ((long)0x00004000);
+public static final long V4L2_STD_NTSC_M_KR =      ((long)0x00008000);	/* FM A2 */
+
+public static final long V4L2_STD_SECAM_B =        ((long)0x00010000);
+public static final long V4L2_STD_SECAM_D =        ((long)0x00020000);
+public static final long V4L2_STD_SECAM_G =        ((long)0x00040000);
+public static final long V4L2_STD_SECAM_H =        ((long)0x00080000);
+public static final long V4L2_STD_SECAM_K =        ((long)0x00100000);
+public static final long V4L2_STD_SECAM_K1 =       ((long)0x00200000);
+public static final long V4L2_STD_SECAM_L =        ((long)0x00400000);
+public static final long V4L2_STD_SECAM_LC =       ((long)0x00800000);
+
+/* ATSC/HDTV */
+public static final long V4L2_STD_ATSC_8_VSB =     ((long)0x01000000);
+public static final long V4L2_STD_ATSC_16_VSB =    ((long)0x02000000);
+
+/* FIXME:
+   Although std_id is 64 bits, there is an issue on PPC32 architecture that
+   makes switch(__u64) to break. So, there's a hack on v4l2-common.c rounding
+   this value to 32 bits.
+   As, currently, the max value is for V4L2_STD_ATSC_16_VSB (30 bits wide),
+   it should work fine. However, if needed to add more than two standards,
+   v4l2-common.c should be fixed.
+ */
+
+/*
+ * Some macros to merge video standards in order to make live easier for the
+ * drivers and V4L2 applications
+ */
+
+/*
+ * "Common" NTSC/M - It should be noticed that V4L2_STD_NTSC_443 is
+ * Missing here.
+ */
+public static final long V4L2_STD_NTSC =           (V4L2_STD_NTSC_M	|
+				 V4L2_STD_NTSC_M_JP     |
+				 V4L2_STD_NTSC_M_KR);
+/* Secam macros */
+public static final long V4L2_STD_SECAM_DK =	(V4L2_STD_SECAM_D	|
+				 V4L2_STD_SECAM_K	|
+				 V4L2_STD_SECAM_K1);
+/* All Secam Standards */
+public static final long V4L2_STD_SECAM =		(V4L2_STD_SECAM_B	|
+				 V4L2_STD_SECAM_G	|
+				 V4L2_STD_SECAM_H	|
+				 V4L2_STD_SECAM_DK	|
+				 V4L2_STD_SECAM_L       |
+				 V4L2_STD_SECAM_LC);
+/* PAL macros */
+public static final long V4L2_STD_PAL_BG =		(V4L2_STD_PAL_B		|
+				 V4L2_STD_PAL_B1	|
+				 V4L2_STD_PAL_G);
+public static final long V4L2_STD_PAL_DK =		(V4L2_STD_PAL_D		|
+				 V4L2_STD_PAL_D1	|
+				 V4L2_STD_PAL_K);
+/*
+ * "Common" PAL - This macro is there to be compatible with the old
+ * V4L1 concept of "PAL": /BGDKHI.
+ * Several PAL standards are missing here: /M, /N and /Nc
+ */
+public static final long V4L2_STD_PAL =		(V4L2_STD_PAL_BG	|
+				 V4L2_STD_PAL_DK	|
+				 V4L2_STD_PAL_H		|
+				 V4L2_STD_PAL_I);
+/* Chroma "agnostic" standards */
+public static final long V4L2_STD_B =		(V4L2_STD_PAL_B		|
+				 V4L2_STD_PAL_B1	|
+				 V4L2_STD_SECAM_B);
+public static final long V4L2_STD_G =		(V4L2_STD_PAL_G		|
+				 V4L2_STD_SECAM_G);
+public static final long V4L2_STD_H =		(V4L2_STD_PAL_H		|
+				 V4L2_STD_SECAM_H);
+public static final long V4L2_STD_L =		(V4L2_STD_SECAM_L	|
+				 V4L2_STD_SECAM_LC);
+public static final long V4L2_STD_GH =		(V4L2_STD_G		|
+				 V4L2_STD_H);
+public static final long V4L2_STD_DK =		(V4L2_STD_PAL_DK	|
+				 V4L2_STD_SECAM_DK);
+public static final long V4L2_STD_BG =		(V4L2_STD_B		|
+				 V4L2_STD_G);
+public static final long V4L2_STD_MN =		(V4L2_STD_PAL_M		|
+				 V4L2_STD_PAL_N		|
+				 V4L2_STD_PAL_Nc	|
+				 V4L2_STD_NTSC);
+
+/* Standards where MTS/BTSC stereo could be found */
+public static final long V4L2_STD_MTS =		(V4L2_STD_NTSC_M	|
+				 V4L2_STD_PAL_M		|
+				 V4L2_STD_PAL_N		|
+				 V4L2_STD_PAL_Nc);
+
+/* Standards for Countries with 60Hz Line frequency */
+public static final long V4L2_STD_525_60 =		(V4L2_STD_PAL_M		|
+				 V4L2_STD_PAL_60	|
+				 V4L2_STD_NTSC		|
+				 V4L2_STD_NTSC_443);
+/* Standards for Countries with 50Hz Line frequency */
+public static final long V4L2_STD_625_50 =		(V4L2_STD_PAL		|
+				 V4L2_STD_PAL_N		|
+				 V4L2_STD_PAL_Nc	|
+				 V4L2_STD_SECAM);
+
+public static final long V4L2_STD_ATSC =           (V4L2_STD_ATSC_8_VSB    |
+				 V4L2_STD_ATSC_16_VSB);
+/* Macros with none and all analog standards */
+public static final int V4L2_STD_UNKNOWN =        0;
+public static final long V4L2_STD_ALL =            (V4L2_STD_525_60	|
+				 V4L2_STD_625_50);
+
+public static class v4l2_standard extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_standard() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_standard(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_standard(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_standard position(long position) {
+        return (v4l2_standard)super.position(position);
+    }
+
+	public native @Cast("__u32") int index(); public native v4l2_standard index(int index);
+	public native @Cast("v4l2_std_id") long id(); public native v4l2_standard id(long id);
+	public native @Cast("__u8") short name(int i); public native v4l2_standard name(int i, short name);
+	@MemberGetter public native @Cast("__u8*") ShortPointer name();
+	public native @ByRef v4l2_fract frameperiod(); public native v4l2_standard frameperiod(v4l2_fract frameperiod); /* Frames, not fields */
+	public native @Cast("__u32") int framelines(); public native v4l2_standard framelines(int framelines);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_standard reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+}
+
+/*
+ *	D V	B T	T I M I N G S
+ */
+
+/** struct v4l2_bt_timings - BT.656/BT.1120 timing data
+ * \width:	total width of the active video in pixels
+ * \height:	total height of the active video in lines
+ * \interlaced:	Interlaced or progressive
+ * \polarities:	Positive or negative polarities
+ * \pixelclock:	Pixel clock in HZ. Ex. 74.25MHz->74250000
+ * \hfrontporch:Horizontal front porch in pixels
+ * \hsync:	Horizontal Sync length in pixels
+ * \hbackporch:	Horizontal back porch in pixels
+ * \vfrontporch:Vertical front porch in lines
+ * \vsync:	Vertical Sync length in lines
+ * \vbackporch:	Vertical back porch in lines
+ * \il_vfrontporch:Vertical front porch for the even field
+ *		(aka field 2) of interlaced field formats
+ * \il_vsync:	Vertical Sync length for the even field
+ *		(aka field 2) of interlaced field formats
+ * \il_vbackporch:Vertical back porch for the even field
+ *		(aka field 2) of interlaced field formats
+ * \standards:	Standards the timing belongs to
+ * \flags:	Flags
+ * \picture_aspect: The picture aspect ratio (hor/vert).
+ * \cea861_vic:	VIC code as per the CEA-861 standard.
+ * \hdmi_vic:	VIC code as per the HDMI standard.
+ * \reserved:	Reserved fields, must be zeroed.
+ *
+ * A note regarding vertical interlaced timings: height refers to the total
+ * height of the active video frame (= two fields). The blanking timings refer
+ * to the blanking of each field. So the height of the total frame is
+ * calculated as follows:
+ *
+ * tot_height = height + vfrontporch + vsync + vbackporch +
+ *                       il_vfrontporch + il_vsync + il_vbackporch
+ *
+ * The active height of each field is height / 2.
+ */
+public static class v4l2_bt_timings extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_bt_timings() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_bt_timings(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_bt_timings(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_bt_timings position(long position) {
+        return (v4l2_bt_timings)super.position(position);
+    }
+
+	public native @Cast("__u32") int width(); public native v4l2_bt_timings width(int width);
+	public native @Cast("__u32") int height(); public native v4l2_bt_timings height(int height);
+	public native @Cast("__u32") int interlaced(); public native v4l2_bt_timings interlaced(int interlaced);
+	public native @Cast("__u32") int polarities(); public native v4l2_bt_timings polarities(int polarities);
+	public native @Cast("__u64") long pixelclock(); public native v4l2_bt_timings pixelclock(long pixelclock);
+	public native @Cast("__u32") int hfrontporch(); public native v4l2_bt_timings hfrontporch(int hfrontporch);
+	public native @Cast("__u32") int hsync(); public native v4l2_bt_timings hsync(int hsync);
+	public native @Cast("__u32") int hbackporch(); public native v4l2_bt_timings hbackporch(int hbackporch);
+	public native @Cast("__u32") int vfrontporch(); public native v4l2_bt_timings vfrontporch(int vfrontporch);
+	public native @Cast("__u32") int vsync(); public native v4l2_bt_timings vsync(int vsync);
+	public native @Cast("__u32") int vbackporch(); public native v4l2_bt_timings vbackporch(int vbackporch);
+	public native @Cast("__u32") int il_vfrontporch(); public native v4l2_bt_timings il_vfrontporch(int il_vfrontporch);
+	public native @Cast("__u32") int il_vsync(); public native v4l2_bt_timings il_vsync(int il_vsync);
+	public native @Cast("__u32") int il_vbackporch(); public native v4l2_bt_timings il_vbackporch(int il_vbackporch);
+	public native @Cast("__u32") int standards(); public native v4l2_bt_timings standards(int standards);
+	public native @Cast("__u32") int flags(); public native v4l2_bt_timings flags(int flags);
+	public native @ByRef v4l2_fract picture_aspect(); public native v4l2_bt_timings picture_aspect(v4l2_fract picture_aspect);
+	public native @Cast("__u8") short cea861_vic(); public native v4l2_bt_timings cea861_vic(short cea861_vic);
+	public native @Cast("__u8") short hdmi_vic(); public native v4l2_bt_timings hdmi_vic(short hdmi_vic);
+	public native @Cast("__u8") short reserved(int i); public native v4l2_bt_timings reserved(int i, short reserved);
+	@MemberGetter public native @Cast("__u8*") ShortPointer reserved();
+} 
+
+/* Interlaced or progressive format */
+public static final int V4L2_DV_PROGRESSIVE =	0;
+public static final int V4L2_DV_INTERLACED =	1;
+
+/* Polarities. If bit is not set, it is assumed to be negative polarity */
+public static final int V4L2_DV_VSYNC_POS_POL =	0x00000001;
+public static final int V4L2_DV_HSYNC_POS_POL =	0x00000002;
+
+/* Timings standards */
+public static final int V4L2_DV_BT_STD_CEA861 =	(1 << 0);  /* CEA-861 Digital TV Profile */
+public static final int V4L2_DV_BT_STD_DMT =	(1 << 1);  /* VESA Discrete Monitor Timings */
+public static final int V4L2_DV_BT_STD_CVT =	(1 << 2);  /* VESA Coordinated Video Timings */
+public static final int V4L2_DV_BT_STD_GTF =	(1 << 3);  /* VESA Generalized Timings Formula */
+public static final int V4L2_DV_BT_STD_SDI =	(1 << 4);  /* SDI Timings */
+
+/* Flags */
+
+/*
+ * CVT/GTF specific: timing uses reduced blanking (CVT) or the 'Secondary
+ * GTF' curve (GTF). In both cases the horizontal and/or vertical blanking
+ * intervals are reduced, allowing a higher resolution over the same
+ * bandwidth. This is a read-only flag.
+ */
+public static final int V4L2_DV_FL_REDUCED_BLANKING =		(1 << 0);
+/*
+ * CEA-861 specific: set for CEA-861 formats with a framerate of a multiple
+ * of six. These formats can be optionally played at 1 / 1.001 speed.
+ * This is a read-only flag.
+ */
+public static final int V4L2_DV_FL_CAN_REDUCE_FPS =		(1 << 1);
+/*
+ * CEA-861 specific: only valid for video transmitters, the flag is cleared
+ * by receivers.
+ * If the framerate of the format is a multiple of six, then the pixelclock
+ * used to set up the transmitter is divided by 1.001 to make it compatible
+ * with 60 Hz based standards such as NTSC and PAL-M that use a framerate of
+ * 29.97 Hz. Otherwise this flag is cleared. If the transmitter can't generate
+ * such frequencies, then the flag will also be cleared.
+ */
+public static final int V4L2_DV_FL_REDUCED_FPS =			(1 << 2);
+/*
+ * Specific to interlaced formats: if set, then field 1 is really one half-line
+ * longer and field 2 is really one half-line shorter, so each field has
+ * exactly the same number of half-lines. Whether half-lines can be detected
+ * or used depends on the hardware.
+ */
+public static final int V4L2_DV_FL_HALF_LINE =			(1 << 3);
+/*
+ * If set, then this is a Consumer Electronics (CE) video format. Such formats
+ * differ from other formats (commonly called IT formats) in that if RGB
+ * encoding is used then by default the RGB values use limited range (i.e.
+ * use the range 16-235) as opposed to 0-255. All formats defined in CEA-861
+ * except for the 640x480 format are CE formats.
+ */
+public static final int V4L2_DV_FL_IS_CE_VIDEO =			(1 << 4);
+/* Some formats like SMPTE-125M have an interlaced signal with a odd
+ * total height. For these formats, if this flag is set, the first
+ * field has the extra line. If not, it is the second field.
+ */
+public static final int V4L2_DV_FL_FIRST_FIELD_EXTRA_LINE =	(1 << 5);
+/*
+ * If set, then the picture_aspect field is valid. Otherwise assume that the
+ * pixels are square, so the picture aspect ratio is the same as the width to
+ * height ratio.
+ */
+public static final int V4L2_DV_FL_HAS_PICTURE_ASPECT =		(1 << 6);
+/*
+ * If set, then the cea861_vic field is valid and contains the Video
+ * Identification Code as per the CEA-861 standard.
+ */
+public static final int V4L2_DV_FL_HAS_CEA861_VIC =		(1 << 7);
+/*
+ * If set, then the hdmi_vic field is valid and contains the Video
+ * Identification Code as per the HDMI standard (HDMI Vendor Specific
+ * InfoFrame).
+ */
+public static final int V4L2_DV_FL_HAS_HDMI_VIC =			(1 << 8);
+/*
+ * CEA-861 specific: only valid for video receivers.
+ * If set, then HW can detect the difference between regular FPS and
+ * 1000/1001 FPS. Note: This flag is only valid for HDMI VIC codes with
+ * the V4L2_DV_FL_CAN_REDUCE_FPS flag set.
+ */
+public static final int V4L2_DV_FL_CAN_DETECT_REDUCED_FPS =	(1 << 9);
+
+/* A few useful defines to calculate the total blanking and frame sizes */
+// #define V4L2_DV_BT_BLANKING_WIDTH(bt)
+// 	((bt)->hfrontporch + (bt)->hsync + (bt)->hbackporch)
+// #define V4L2_DV_BT_FRAME_WIDTH(bt)
+// 	((bt)->width + V4L2_DV_BT_BLANKING_WIDTH(bt))
+// #define V4L2_DV_BT_BLANKING_HEIGHT(bt)
+// 	((bt)->vfrontporch + (bt)->vsync + (bt)->vbackporch +
+// 	 (bt)->il_vfrontporch + (bt)->il_vsync + (bt)->il_vbackporch)
+// #define V4L2_DV_BT_FRAME_HEIGHT(bt)
+// 	((bt)->height + V4L2_DV_BT_BLANKING_HEIGHT(bt))
+
+/** struct v4l2_dv_timings - DV timings
+ * \type:	the type of the timings
+ * \bt:	BT656/1120 timings
+ */
+public static class v4l2_dv_timings extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_dv_timings() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_dv_timings(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_dv_timings(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_dv_timings position(long position) {
+        return (v4l2_dv_timings)super.position(position);
+    }
+
+	public native @Cast("__u32") int type(); public native v4l2_dv_timings type(int type);
+		public native @ByRef v4l2_bt_timings bt(); public native v4l2_dv_timings bt(v4l2_bt_timings bt);
+		public native @Cast("__u32") int reserved(int i); public native v4l2_dv_timings reserved(int i, int reserved);
+		@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+} 
+
+/* Values for the type field */
+public static final int V4L2_DV_BT_656_1120 =	0;	/* BT.656/1120 timing type */
+
+
+/** struct v4l2_enum_dv_timings - DV timings enumeration
+ * \index:	enumeration index
+ * \pad:	the pad number for which to enumerate timings (used with
+ *		v4l-subdev nodes only)
+ * \reserved:	must be zeroed
+ * \timings:	the timings for the given index
+ */
+public static class v4l2_enum_dv_timings extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_enum_dv_timings() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_enum_dv_timings(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_enum_dv_timings(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_enum_dv_timings position(long position) {
+        return (v4l2_enum_dv_timings)super.position(position);
+    }
+
+	public native @Cast("__u32") int index(); public native v4l2_enum_dv_timings index(int index);
+	public native @Cast("__u32") int pad(); public native v4l2_enum_dv_timings pad(int pad);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_enum_dv_timings reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+	public native @ByRef v4l2_dv_timings timings(); public native v4l2_enum_dv_timings timings(v4l2_dv_timings timings);
+}
+
+/** struct v4l2_bt_timings_cap - BT.656/BT.1120 timing capabilities
+ * \min_width:		width in pixels
+ * \max_width:		width in pixels
+ * \min_height:		height in lines
+ * \max_height:		height in lines
+ * \min_pixelclock:	Pixel clock in HZ. Ex. 74.25MHz->74250000
+ * \max_pixelclock:	Pixel clock in HZ. Ex. 74.25MHz->74250000
+ * \standards:		Supported standards
+ * \capabilities:	Supported capabilities
+ * \reserved:		Must be zeroed
+ */
+public static class v4l2_bt_timings_cap extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_bt_timings_cap() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_bt_timings_cap(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_bt_timings_cap(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_bt_timings_cap position(long position) {
+        return (v4l2_bt_timings_cap)super.position(position);
+    }
+
+	public native @Cast("__u32") int min_width(); public native v4l2_bt_timings_cap min_width(int min_width);
+	public native @Cast("__u32") int max_width(); public native v4l2_bt_timings_cap max_width(int max_width);
+	public native @Cast("__u32") int min_height(); public native v4l2_bt_timings_cap min_height(int min_height);
+	public native @Cast("__u32") int max_height(); public native v4l2_bt_timings_cap max_height(int max_height);
+	public native @Cast("__u64") long min_pixelclock(); public native v4l2_bt_timings_cap min_pixelclock(long min_pixelclock);
+	public native @Cast("__u64") long max_pixelclock(); public native v4l2_bt_timings_cap max_pixelclock(long max_pixelclock);
+	public native @Cast("__u32") int standards(); public native v4l2_bt_timings_cap standards(int standards);
+	public native @Cast("__u32") int capabilities(); public native v4l2_bt_timings_cap capabilities(int capabilities);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_bt_timings_cap reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+} 
+
+/* Supports interlaced formats */
+public static final int V4L2_DV_BT_CAP_INTERLACED =	(1 << 0);
+/* Supports progressive formats */
+public static final int V4L2_DV_BT_CAP_PROGRESSIVE =	(1 << 1);
+/* Supports CVT/GTF reduced blanking */
+public static final int V4L2_DV_BT_CAP_REDUCED_BLANKING =	(1 << 2);
+/* Supports custom formats */
+public static final int V4L2_DV_BT_CAP_CUSTOM =		(1 << 3);
+
+/** struct v4l2_dv_timings_cap - DV timings capabilities
+ * \type:	the type of the timings (same as in struct v4l2_dv_timings)
+ * \pad:	the pad number for which to query capabilities (used with
+ *		v4l-subdev nodes only)
+ * \bt:		the BT656/1120 timings capabilities
+ */
+public static class v4l2_dv_timings_cap extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_dv_timings_cap() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_dv_timings_cap(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_dv_timings_cap(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_dv_timings_cap position(long position) {
+        return (v4l2_dv_timings_cap)super.position(position);
+    }
+
+	public native @Cast("__u32") int type(); public native v4l2_dv_timings_cap type(int type);
+	public native @Cast("__u32") int pad(); public native v4l2_dv_timings_cap pad(int pad);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_dv_timings_cap reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+		public native @ByRef v4l2_bt_timings_cap bt(); public native v4l2_dv_timings_cap bt(v4l2_bt_timings_cap bt);
+		public native @Cast("__u32") int raw_data(int i); public native v4l2_dv_timings_cap raw_data(int i, int raw_data);
+		@MemberGetter public native @Cast("__u32*") IntPointer raw_data();
+}
+
+
+/*
+ *	V I D E O   I N P U T S
+ */
+public static class v4l2_input extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_input() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_input(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_input(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_input position(long position) {
+        return (v4l2_input)super.position(position);
+    }
+
+	public native @Cast("__u32") int index(); public native v4l2_input index(int index);		/*  Which input */
+	public native @Cast("__u8") short name(int i); public native v4l2_input name(int i, short name);
+	@MemberGetter public native @Cast("__u8*") ShortPointer name();		/*  Label */
+	public native @Cast("__u32") int type(); public native v4l2_input type(int type);		/*  Type of input */
+	public native @Cast("__u32") int audioset(); public native v4l2_input audioset(int audioset);		/*  Associated audios (bitfield) */
+	public native @Cast("__u32") int tuner(); public native v4l2_input tuner(int tuner);             /*  enum v4l2_tuner_type */
+	public native @Cast("v4l2_std_id") long std(); public native v4l2_input std(long std);
+	public native @Cast("__u32") int status(); public native v4l2_input status(int status);
+	public native @Cast("__u32") int capabilities(); public native v4l2_input capabilities(int capabilities);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_input reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+}
+
+/*  Values for the 'type' field */
+public static final int V4L2_INPUT_TYPE_TUNER =		1;
+public static final int V4L2_INPUT_TYPE_CAMERA =		2;
+public static final int V4L2_INPUT_TYPE_TOUCH =		3;
+
+/* field 'status' - general */
+public static final int V4L2_IN_ST_NO_POWER =    0x00000001;  /* Attached device is off */
+public static final int V4L2_IN_ST_NO_SIGNAL =   0x00000002;
+public static final int V4L2_IN_ST_NO_COLOR =    0x00000004;
+
+/* field 'status' - sensor orientation */
+/* If sensor is mounted upside down set both bits */
+public static final int V4L2_IN_ST_HFLIP =       0x00000010; /* Frames are flipped horizontally */
+public static final int V4L2_IN_ST_VFLIP =       0x00000020; /* Frames are flipped vertically */
+
+/* field 'status' - analog */
+public static final int V4L2_IN_ST_NO_H_LOCK =   0x00000100;  /* No horizontal sync lock */
+public static final int V4L2_IN_ST_COLOR_KILL =  0x00000200;  /* Color killer is active */
+public static final int V4L2_IN_ST_NO_V_LOCK =   0x00000400;  /* No vertical sync lock */
+public static final int V4L2_IN_ST_NO_STD_LOCK = 0x00000800;  /* No standard format lock */
+
+/* field 'status' - digital */
+public static final int V4L2_IN_ST_NO_SYNC =     0x00010000;  /* No synchronization lock */
+public static final int V4L2_IN_ST_NO_EQU =      0x00020000;  /* No equalizer lock */
+public static final int V4L2_IN_ST_NO_CARRIER =  0x00040000;  /* Carrier recovery failed */
+
+/* field 'status' - VCR and set-top box */
+public static final int V4L2_IN_ST_MACROVISION = 0x01000000;  /* Macrovision detected */
+public static final int V4L2_IN_ST_NO_ACCESS =   0x02000000;  /* Conditional access denied */
+public static final int V4L2_IN_ST_VTR =         0x04000000;  /* VTR time constant */
+
+/* capabilities flags */
+public static final int V4L2_IN_CAP_DV_TIMINGS =		0x00000002; /* Supports S_DV_TIMINGS */
+public static final int V4L2_IN_CAP_CUSTOM_TIMINGS =	V4L2_IN_CAP_DV_TIMINGS; /* For compatibility */
+public static final int V4L2_IN_CAP_STD =			0x00000004; /* Supports S_STD */
+public static final int V4L2_IN_CAP_NATIVE_SIZE =		0x00000008; /* Supports setting native size */
+
+/*
+ *	V I D E O   O U T P U T S
+ */
+public static class v4l2_output extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_output() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_output(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_output(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_output position(long position) {
+        return (v4l2_output)super.position(position);
+    }
+
+	public native @Cast("__u32") int index(); public native v4l2_output index(int index);		/*  Which output */
+	public native @Cast("__u8") short name(int i); public native v4l2_output name(int i, short name);
+	@MemberGetter public native @Cast("__u8*") ShortPointer name();		/*  Label */
+	public native @Cast("__u32") int type(); public native v4l2_output type(int type);		/*  Type of output */
+	public native @Cast("__u32") int audioset(); public native v4l2_output audioset(int audioset);		/*  Associated audios (bitfield) */
+	public native @Cast("__u32") int modulator(); public native v4l2_output modulator(int modulator);         /*  Associated modulator */
+	public native @Cast("v4l2_std_id") long std(); public native v4l2_output std(long std);
+	public native @Cast("__u32") int capabilities(); public native v4l2_output capabilities(int capabilities);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_output reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+}
+/*  Values for the 'type' field */
+public static final int V4L2_OUTPUT_TYPE_MODULATOR =		1;
+public static final int V4L2_OUTPUT_TYPE_ANALOG =			2;
+public static final int V4L2_OUTPUT_TYPE_ANALOGVGAOVERLAY =	3;
+
+/* capabilities flags */
+public static final int V4L2_OUT_CAP_DV_TIMINGS =		0x00000002; /* Supports S_DV_TIMINGS */
+public static final int V4L2_OUT_CAP_CUSTOM_TIMINGS =	V4L2_OUT_CAP_DV_TIMINGS; /* For compatibility */
+public static final int V4L2_OUT_CAP_STD =		0x00000004; /* Supports S_STD */
+public static final int V4L2_OUT_CAP_NATIVE_SIZE =	0x00000008; /* Supports setting native size */
+
+/*
+ *	C O N T R O L S
+ */
+public static class v4l2_control extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_control() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_control(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_control(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_control position(long position) {
+        return (v4l2_control)super.position(position);
+    }
+
+	public native @Cast("__u32") int id(); public native v4l2_control id(int id);
+	public native @Cast("__s32") int value(); public native v4l2_control value(int value);
+}
+
+public static class v4l2_ext_control extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_ext_control() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_ext_control(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_ext_control(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_ext_control position(long position) {
+        return (v4l2_ext_control)super.position(position);
+    }
+
+	public native @Cast("__u32") int id(); public native v4l2_ext_control id(int id);
+	public native @Cast("__u32") int size(); public native v4l2_ext_control size(int size);
+	public native @Cast("__u32") int reserved2(int i); public native v4l2_ext_control reserved2(int i, int reserved2);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved2();
+		public native @Cast("__s32") int value(); public native v4l2_ext_control value(int value);
+		public native @Cast("__s64") long value64(); public native v4l2_ext_control value64(long value64);
+		public native @Cast("char*") BytePointer string(); public native v4l2_ext_control string(BytePointer string);
+		public native @Cast("__u8*") ShortPointer p_u8(); public native v4l2_ext_control p_u8(ShortPointer p_u8);
+		public native @Cast("__u16*") ShortPointer p_u16(); public native v4l2_ext_control p_u16(ShortPointer p_u16);
+		public native @Cast("__u32*") IntPointer p_u32(); public native v4l2_ext_control p_u32(IntPointer p_u32);
+		public native Pointer ptr(); public native v4l2_ext_control ptr(Pointer ptr);
+} 
+
+public static class v4l2_ext_controls extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_ext_controls() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_ext_controls(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_ext_controls(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_ext_controls position(long position) {
+        return (v4l2_ext_controls)super.position(position);
+    }
+
+// #ifndef __KERNEL__
+		public native @Cast("__u32") int ctrl_class(); public native v4l2_ext_controls ctrl_class(int ctrl_class);
+// #endif
+		public native @Cast("__u32") int which(); public native v4l2_ext_controls which(int which);
+	public native @Cast("__u32") int count(); public native v4l2_ext_controls count(int count);
+	public native @Cast("__u32") int error_idx(); public native v4l2_ext_controls error_idx(int error_idx);
+	public native @Cast("__s32") int request_fd(); public native v4l2_ext_controls request_fd(int request_fd);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_ext_controls reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+	public native v4l2_ext_control controls(); public native v4l2_ext_controls controls(v4l2_ext_control controls);
+}
+
+public static final int V4L2_CTRL_ID_MASK =	  (0x0fffffff);
+// #ifndef __KERNEL__
+// #define V4L2_CTRL_ID2CLASS(id)    ((id) & 0x0fff0000L)
+// #endif
+// #define V4L2_CTRL_ID2WHICH(id)    ((id) & 0x0fff0000L)
+// #define V4L2_CTRL_DRIVER_PRIV(id) (((id) & 0xffff) >= 0x1000)
+public static final int V4L2_CTRL_MAX_DIMS =	  (4);
+public static final int V4L2_CTRL_WHICH_CUR_VAL =   0;
+public static final int V4L2_CTRL_WHICH_DEF_VAL =   0x0f000000;
+public static final int V4L2_CTRL_WHICH_REQUEST_VAL = 0x0f010000;
+
+/** enum v4l2_ctrl_type */
+public static final int
+	V4L2_CTRL_TYPE_INTEGER	      = 1,
+	V4L2_CTRL_TYPE_BOOLEAN	      = 2,
+	V4L2_CTRL_TYPE_MENU	      = 3,
+	V4L2_CTRL_TYPE_BUTTON	      = 4,
+	V4L2_CTRL_TYPE_INTEGER64     = 5,
+	V4L2_CTRL_TYPE_CTRL_CLASS    = 6,
+	V4L2_CTRL_TYPE_STRING        = 7,
+	V4L2_CTRL_TYPE_BITMASK       = 8,
+	V4L2_CTRL_TYPE_INTEGER_MENU  = 9,
+
+	/* Compound types are >= 0x0100 */
+	V4L2_CTRL_COMPOUND_TYPES     = 0x0100,
+	V4L2_CTRL_TYPE_U8	      = 0x0100,
+	V4L2_CTRL_TYPE_U16	      = 0x0101,
+	V4L2_CTRL_TYPE_U32	      = 0x0102;
+
+/*  Used in the VIDIOC_QUERYCTRL ioctl for querying controls */
+public static class v4l2_queryctrl extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_queryctrl() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_queryctrl(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_queryctrl(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_queryctrl position(long position) {
+        return (v4l2_queryctrl)super.position(position);
+    }
+
+	public native @Cast("__u32") int id(); public native v4l2_queryctrl id(int id);
+	public native @Cast("__u32") int type(); public native v4l2_queryctrl type(int type);	/* enum v4l2_ctrl_type */
+	public native @Cast("__u8") short name(int i); public native v4l2_queryctrl name(int i, short name);
+	@MemberGetter public native @Cast("__u8*") ShortPointer name();	/* Whatever */
+	public native @Cast("__s32") int minimum(); public native v4l2_queryctrl minimum(int minimum);	/* Note signedness */
+	public native @Cast("__s32") int maximum(); public native v4l2_queryctrl maximum(int maximum);
+	public native @Cast("__s32") int step(); public native v4l2_queryctrl step(int step);
+	public native @Cast("__s32") int default_value(); public native v4l2_queryctrl default_value(int default_value);
+	public native @Cast("__u32") int flags(); public native v4l2_queryctrl flags(int flags);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_queryctrl reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+}
+
+/*  Used in the VIDIOC_QUERY_EXT_CTRL ioctl for querying extended controls */
+public static class v4l2_query_ext_ctrl extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_query_ext_ctrl() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_query_ext_ctrl(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_query_ext_ctrl(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_query_ext_ctrl position(long position) {
+        return (v4l2_query_ext_ctrl)super.position(position);
+    }
+
+	public native @Cast("__u32") int id(); public native v4l2_query_ext_ctrl id(int id);
+	public native @Cast("__u32") int type(); public native v4l2_query_ext_ctrl type(int type);
+	public native @Cast("char") byte name(int i); public native v4l2_query_ext_ctrl name(int i, byte name);
+	@MemberGetter public native @Cast("char*") BytePointer name();
+	public native @Cast("__s64") long minimum(); public native v4l2_query_ext_ctrl minimum(long minimum);
+	public native @Cast("__s64") long maximum(); public native v4l2_query_ext_ctrl maximum(long maximum);
+	public native @Cast("__u64") long step(); public native v4l2_query_ext_ctrl step(long step);
+	public native @Cast("__s64") long default_value(); public native v4l2_query_ext_ctrl default_value(long default_value);
+	public native @Cast("__u32") int flags(); public native v4l2_query_ext_ctrl flags(int flags);
+	public native @Cast("__u32") int elem_size(); public native v4l2_query_ext_ctrl elem_size(int elem_size);
+	public native @Cast("__u32") int elems(); public native v4l2_query_ext_ctrl elems(int elems);
+	public native @Cast("__u32") int nr_of_dims(); public native v4l2_query_ext_ctrl nr_of_dims(int nr_of_dims);
+	public native @Cast("__u32") int dims(int i); public native v4l2_query_ext_ctrl dims(int i, int dims);
+	@MemberGetter public native @Cast("__u32*") IntPointer dims();
+	public native @Cast("__u32") int reserved(int i); public native v4l2_query_ext_ctrl reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+}
+
+/*  Used in the VIDIOC_QUERYMENU ioctl for querying menu items */
+public static class v4l2_querymenu extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_querymenu() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_querymenu(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_querymenu(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_querymenu position(long position) {
+        return (v4l2_querymenu)super.position(position);
+    }
+
+	public native @Cast("__u32") int id(); public native v4l2_querymenu id(int id);
+	public native @Cast("__u32") int index(); public native v4l2_querymenu index(int index);
+		public native @Cast("__u8") short name(int i); public native v4l2_querymenu name(int i, short name);
+		@MemberGetter public native @Cast("__u8*") ShortPointer name();	/* Whatever */
+		public native @Cast("__s64") long value(); public native v4l2_querymenu value(long value);
+	public native @Cast("__u32") int reserved(); public native v4l2_querymenu reserved(int reserved);
+} 
+
+/*  Control flags  */
+public static final int V4L2_CTRL_FLAG_DISABLED =		0x0001;
+public static final int V4L2_CTRL_FLAG_GRABBED =		0x0002;
+public static final int V4L2_CTRL_FLAG_READ_ONLY =	0x0004;
+public static final int V4L2_CTRL_FLAG_UPDATE =		0x0008;
+public static final int V4L2_CTRL_FLAG_INACTIVE =		0x0010;
+public static final int V4L2_CTRL_FLAG_SLIDER =		0x0020;
+public static final int V4L2_CTRL_FLAG_WRITE_ONLY =	0x0040;
+public static final int V4L2_CTRL_FLAG_VOLATILE =		0x0080;
+public static final int V4L2_CTRL_FLAG_HAS_PAYLOAD =	0x0100;
+public static final int V4L2_CTRL_FLAG_EXECUTE_ON_WRITE =	0x0200;
+public static final int V4L2_CTRL_FLAG_MODIFY_LAYOUT =	0x0400;
+
+/*  Query flags, to be ORed with the control ID */
+public static final int V4L2_CTRL_FLAG_NEXT_CTRL =	0x80000000;
+public static final int V4L2_CTRL_FLAG_NEXT_COMPOUND =	0x40000000;
+
+/*  User-class control IDs defined by V4L2 */
+public static final int V4L2_CID_MAX_CTRLS =		1024;
+/*  IDs reserved for driver specific controls */
+public static final int V4L2_CID_PRIVATE_BASE =		0x08000000;
+
+
+/*
+ *	T U N I N G
+ */
+public static class v4l2_tuner extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_tuner() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_tuner(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_tuner(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_tuner position(long position) {
+        return (v4l2_tuner)super.position(position);
+    }
+
+	public native @Cast("__u32") int index(); public native v4l2_tuner index(int index);
+	public native @Cast("__u8") short name(int i); public native v4l2_tuner name(int i, short name);
+	@MemberGetter public native @Cast("__u8*") ShortPointer name();
+	public native @Cast("__u32") int type(); public native v4l2_tuner type(int type);	/* enum v4l2_tuner_type */
+	public native @Cast("__u32") int capability(); public native v4l2_tuner capability(int capability);
+	public native @Cast("__u32") int rangelow(); public native v4l2_tuner rangelow(int rangelow);
+	public native @Cast("__u32") int rangehigh(); public native v4l2_tuner rangehigh(int rangehigh);
+	public native @Cast("__u32") int rxsubchans(); public native v4l2_tuner rxsubchans(int rxsubchans);
+	public native @Cast("__u32") int audmode(); public native v4l2_tuner audmode(int audmode);
+	public native @Cast("__s32") int signal(); public native v4l2_tuner signal(int signal);
+	public native @Cast("__s32") int afc(); public native v4l2_tuner afc(int afc);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_tuner reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+}
+
+public static class v4l2_modulator extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_modulator() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_modulator(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_modulator(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_modulator position(long position) {
+        return (v4l2_modulator)super.position(position);
+    }
+
+	public native @Cast("__u32") int index(); public native v4l2_modulator index(int index);
+	public native @Cast("__u8") short name(int i); public native v4l2_modulator name(int i, short name);
+	@MemberGetter public native @Cast("__u8*") ShortPointer name();
+	public native @Cast("__u32") int capability(); public native v4l2_modulator capability(int capability);
+	public native @Cast("__u32") int rangelow(); public native v4l2_modulator rangelow(int rangelow);
+	public native @Cast("__u32") int rangehigh(); public native v4l2_modulator rangehigh(int rangehigh);
+	public native @Cast("__u32") int txsubchans(); public native v4l2_modulator txsubchans(int txsubchans);
+	public native @Cast("__u32") int type(); public native v4l2_modulator type(int type);	/* enum v4l2_tuner_type */
+	public native @Cast("__u32") int reserved(int i); public native v4l2_modulator reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+}
+
+/*  Flags for the 'capability' field */
+public static final int V4L2_TUNER_CAP_LOW =		0x0001;
+public static final int V4L2_TUNER_CAP_NORM =		0x0002;
+public static final int V4L2_TUNER_CAP_HWSEEK_BOUNDED =	0x0004;
+public static final int V4L2_TUNER_CAP_HWSEEK_WRAP =	0x0008;
+public static final int V4L2_TUNER_CAP_STEREO =		0x0010;
+public static final int V4L2_TUNER_CAP_LANG2 =		0x0020;
+public static final int V4L2_TUNER_CAP_SAP =		0x0020;
+public static final int V4L2_TUNER_CAP_LANG1 =		0x0040;
+public static final int V4L2_TUNER_CAP_RDS =		0x0080;
+public static final int V4L2_TUNER_CAP_RDS_BLOCK_IO =	0x0100;
+public static final int V4L2_TUNER_CAP_RDS_CONTROLS =	0x0200;
+public static final int V4L2_TUNER_CAP_FREQ_BANDS =	0x0400;
+public static final int V4L2_TUNER_CAP_HWSEEK_PROG_LIM =	0x0800;
+public static final int V4L2_TUNER_CAP_1HZ =		0x1000;
+
+/*  Flags for the 'rxsubchans' field */
+public static final int V4L2_TUNER_SUB_MONO =		0x0001;
+public static final int V4L2_TUNER_SUB_STEREO =		0x0002;
+public static final int V4L2_TUNER_SUB_LANG2 =		0x0004;
+public static final int V4L2_TUNER_SUB_SAP =		0x0004;
+public static final int V4L2_TUNER_SUB_LANG1 =		0x0008;
+public static final int V4L2_TUNER_SUB_RDS =		0x0010;
+
+/*  Values for the 'audmode' field */
+public static final int V4L2_TUNER_MODE_MONO =		0x0000;
+public static final int V4L2_TUNER_MODE_STEREO =		0x0001;
+public static final int V4L2_TUNER_MODE_LANG2 =		0x0002;
+public static final int V4L2_TUNER_MODE_SAP =		0x0002;
+public static final int V4L2_TUNER_MODE_LANG1 =		0x0003;
+public static final int V4L2_TUNER_MODE_LANG1_LANG2 =	0x0004;
+
+public static class v4l2_frequency extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_frequency() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_frequency(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_frequency(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_frequency position(long position) {
+        return (v4l2_frequency)super.position(position);
+    }
+
+	public native @Cast("__u32") int tuner(); public native v4l2_frequency tuner(int tuner);
+	public native @Cast("__u32") int type(); public native v4l2_frequency type(int type);	/* enum v4l2_tuner_type */
+	public native @Cast("__u32") int frequency(); public native v4l2_frequency frequency(int frequency);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_frequency reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+}
+
+public static final int V4L2_BAND_MODULATION_VSB =	(1 << 1);
+public static final int V4L2_BAND_MODULATION_FM =		(1 << 2);
+public static final int V4L2_BAND_MODULATION_AM =		(1 << 3);
+
+public static class v4l2_frequency_band extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_frequency_band() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_frequency_band(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_frequency_band(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_frequency_band position(long position) {
+        return (v4l2_frequency_band)super.position(position);
+    }
+
+	public native @Cast("__u32") int tuner(); public native v4l2_frequency_band tuner(int tuner);
+	public native @Cast("__u32") int type(); public native v4l2_frequency_band type(int type);	/* enum v4l2_tuner_type */
+	public native @Cast("__u32") int index(); public native v4l2_frequency_band index(int index);
+	public native @Cast("__u32") int capability(); public native v4l2_frequency_band capability(int capability);
+	public native @Cast("__u32") int rangelow(); public native v4l2_frequency_band rangelow(int rangelow);
+	public native @Cast("__u32") int rangehigh(); public native v4l2_frequency_band rangehigh(int rangehigh);
+	public native @Cast("__u32") int modulation(); public native v4l2_frequency_band modulation(int modulation);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_frequency_band reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+}
+
+public static class v4l2_hw_freq_seek extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_hw_freq_seek() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_hw_freq_seek(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_hw_freq_seek(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_hw_freq_seek position(long position) {
+        return (v4l2_hw_freq_seek)super.position(position);
+    }
+
+	public native @Cast("__u32") int tuner(); public native v4l2_hw_freq_seek tuner(int tuner);
+	public native @Cast("__u32") int type(); public native v4l2_hw_freq_seek type(int type);	/* enum v4l2_tuner_type */
+	public native @Cast("__u32") int seek_upward(); public native v4l2_hw_freq_seek seek_upward(int seek_upward);
+	public native @Cast("__u32") int wrap_around(); public native v4l2_hw_freq_seek wrap_around(int wrap_around);
+	public native @Cast("__u32") int spacing(); public native v4l2_hw_freq_seek spacing(int spacing);
+	public native @Cast("__u32") int rangelow(); public native v4l2_hw_freq_seek rangelow(int rangelow);
+	public native @Cast("__u32") int rangehigh(); public native v4l2_hw_freq_seek rangehigh(int rangehigh);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_hw_freq_seek reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+}
+
+/*
+ *	R D S
+ */
+
+public static class v4l2_rds_data extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_rds_data() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_rds_data(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_rds_data(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_rds_data position(long position) {
+        return (v4l2_rds_data)super.position(position);
+    }
+
+	public native @Cast("__u8") short lsb(); public native v4l2_rds_data lsb(short lsb);
+	public native @Cast("__u8") short msb(); public native v4l2_rds_data msb(short msb);
+	public native @Cast("__u8") short block(); public native v4l2_rds_data block(short block);
+} 
+
+public static final int V4L2_RDS_BLOCK_MSK =	 0x7;
+public static final int V4L2_RDS_BLOCK_A =	 0;
+public static final int V4L2_RDS_BLOCK_B =	 1;
+public static final int V4L2_RDS_BLOCK_C =	 2;
+public static final int V4L2_RDS_BLOCK_D =	 3;
+public static final int V4L2_RDS_BLOCK_C_ALT =	 4;
+public static final int V4L2_RDS_BLOCK_INVALID =	 7;
+
+public static final int V4L2_RDS_BLOCK_CORRECTED = 0x40;
+public static final int V4L2_RDS_BLOCK_ERROR =	 0x80;
+
+/*
+ *	A U D I O
+ */
+public static class v4l2_audio extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_audio() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_audio(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_audio(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_audio position(long position) {
+        return (v4l2_audio)super.position(position);
+    }
+
+	public native @Cast("__u32") int index(); public native v4l2_audio index(int index);
+	public native @Cast("__u8") short name(int i); public native v4l2_audio name(int i, short name);
+	@MemberGetter public native @Cast("__u8*") ShortPointer name();
+	public native @Cast("__u32") int capability(); public native v4l2_audio capability(int capability);
+	public native @Cast("__u32") int mode(); public native v4l2_audio mode(int mode);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_audio reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+}
+
+/*  Flags for the 'capability' field */
+public static final int V4L2_AUDCAP_STEREO =		0x00001;
+public static final int V4L2_AUDCAP_AVL =			0x00002;
+
+/*  Flags for the 'mode' field */
+public static final int V4L2_AUDMODE_AVL =		0x00001;
+
+public static class v4l2_audioout extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_audioout() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_audioout(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_audioout(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_audioout position(long position) {
+        return (v4l2_audioout)super.position(position);
+    }
+
+	public native @Cast("__u32") int index(); public native v4l2_audioout index(int index);
+	public native @Cast("__u8") short name(int i); public native v4l2_audioout name(int i, short name);
+	@MemberGetter public native @Cast("__u8*") ShortPointer name();
+	public native @Cast("__u32") int capability(); public native v4l2_audioout capability(int capability);
+	public native @Cast("__u32") int mode(); public native v4l2_audioout mode(int mode);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_audioout reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+}
+
+/*
+ *	M P E G   S E R V I C E S
+ */
+// #if 1
+public static final int V4L2_ENC_IDX_FRAME_I =    (0);
+public static final int V4L2_ENC_IDX_FRAME_P =    (1);
+public static final int V4L2_ENC_IDX_FRAME_B =    (2);
+public static final int V4L2_ENC_IDX_FRAME_MASK = (0xf);
+
+public static class v4l2_enc_idx_entry extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_enc_idx_entry() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_enc_idx_entry(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_enc_idx_entry(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_enc_idx_entry position(long position) {
+        return (v4l2_enc_idx_entry)super.position(position);
+    }
+
+	public native @Cast("__u64") long offset(); public native v4l2_enc_idx_entry offset(long offset);
+	public native @Cast("__u64") long pts(); public native v4l2_enc_idx_entry pts(long pts);
+	public native @Cast("__u32") int length(); public native v4l2_enc_idx_entry length(int length);
+	public native @Cast("__u32") int flags(); public native v4l2_enc_idx_entry flags(int flags);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_enc_idx_entry reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+}
+
+public static final int V4L2_ENC_IDX_ENTRIES = (64);
+public static class v4l2_enc_idx extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_enc_idx() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_enc_idx(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_enc_idx(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_enc_idx position(long position) {
+        return (v4l2_enc_idx)super.position(position);
+    }
+
+	public native @Cast("__u32") int entries(); public native v4l2_enc_idx entries(int entries);
+	public native @Cast("__u32") int entries_cap(); public native v4l2_enc_idx entries_cap(int entries_cap);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_enc_idx reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+	public native @ByRef v4l2_enc_idx_entry entry(int i); public native v4l2_enc_idx entry(int i, v4l2_enc_idx_entry entry);
+	@MemberGetter public native v4l2_enc_idx_entry entry();
+}
+
+
+public static final int V4L2_ENC_CMD_START =      (0);
+public static final int V4L2_ENC_CMD_STOP =       (1);
+public static final int V4L2_ENC_CMD_PAUSE =      (2);
+public static final int V4L2_ENC_CMD_RESUME =     (3);
+
+/* Flags for V4L2_ENC_CMD_STOP */
+public static final int V4L2_ENC_CMD_STOP_AT_GOP_END =    (1 << 0);
+
+public static class v4l2_encoder_cmd extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_encoder_cmd() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_encoder_cmd(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_encoder_cmd(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_encoder_cmd position(long position) {
+        return (v4l2_encoder_cmd)super.position(position);
+    }
+
+	public native @Cast("__u32") int cmd(); public native v4l2_encoder_cmd cmd(int cmd);
+	public native @Cast("__u32") int flags(); public native v4l2_encoder_cmd flags(int flags);
+			@Name("raw.data") public native @Cast("__u32") int raw_data(int i); public native v4l2_encoder_cmd raw_data(int i, int raw_data);
+			@Name("raw.data") @MemberGetter public native @Cast("__u32*") IntPointer raw_data();
+}
+
+/* Decoder commands */
+public static final int V4L2_DEC_CMD_START =       (0);
+public static final int V4L2_DEC_CMD_STOP =        (1);
+public static final int V4L2_DEC_CMD_PAUSE =       (2);
+public static final int V4L2_DEC_CMD_RESUME =      (3);
+
+/* Flags for V4L2_DEC_CMD_START */
+public static final int V4L2_DEC_CMD_START_MUTE_AUDIO =	(1 << 0);
+
+/* Flags for V4L2_DEC_CMD_PAUSE */
+public static final int V4L2_DEC_CMD_PAUSE_TO_BLACK =	(1 << 0);
+
+/* Flags for V4L2_DEC_CMD_STOP */
+public static final int V4L2_DEC_CMD_STOP_TO_BLACK =	(1 << 0);
+public static final int V4L2_DEC_CMD_STOP_IMMEDIATELY =	(1 << 1);
+
+/* Play format requirements (returned by the driver): */
+
+/* The decoder has no special format requirements */
+public static final int V4L2_DEC_START_FMT_NONE =		(0);
+/* The decoder requires full GOPs */
+public static final int V4L2_DEC_START_FMT_GOP =		(1);
+
+/* The structure must be zeroed before use by the application
+   This ensures it can be extended safely in the future. */
+public static class v4l2_decoder_cmd extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_decoder_cmd() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_decoder_cmd(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_decoder_cmd(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_decoder_cmd position(long position) {
+        return (v4l2_decoder_cmd)super.position(position);
+    }
+
+	public native @Cast("__u32") int cmd(); public native v4l2_decoder_cmd cmd(int cmd);
+	public native @Cast("__u32") int flags(); public native v4l2_decoder_cmd flags(int flags);
+			@Name("stop.pts") public native @Cast("__u64") long stop_pts(); public native v4l2_decoder_cmd stop_pts(long stop_pts);
+
+			/* 0 or 1000 specifies normal speed,
+			   1 specifies forward single stepping,
+			   -1 specifies backward single stepping,
+			   >1: playback at speed/1000 of the normal speed,
+			   <-1: reverse playback at (-speed/1000) of the normal speed. */
+			@Name("start.speed") public native @Cast("__s32") int start_speed(); public native v4l2_decoder_cmd start_speed(int start_speed);
+			@Name("start.format") public native @Cast("__u32") int start_format(); public native v4l2_decoder_cmd start_format(int start_format);
+
+			@Name("raw.data") public native @Cast("__u32") int raw_data(int i); public native v4l2_decoder_cmd raw_data(int i, int raw_data);
+			@Name("raw.data") @MemberGetter public native @Cast("__u32*") IntPointer raw_data();
+}
+// #endif
+
+
+/*
+ *	D A T A   S E R V I C E S   ( V B I )
+ *
+ *	Data services API by Michael Schimek
+ */
+
+/* Raw VBI */
+public static class v4l2_vbi_format extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_vbi_format() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_vbi_format(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_vbi_format(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_vbi_format position(long position) {
+        return (v4l2_vbi_format)super.position(position);
+    }
+
+	public native @Cast("__u32") int sampling_rate(); public native v4l2_vbi_format sampling_rate(int sampling_rate);		/* in 1 Hz */
+	public native @Cast("__u32") int offset(); public native v4l2_vbi_format offset(int offset);
+	public native @Cast("__u32") int samples_per_line(); public native v4l2_vbi_format samples_per_line(int samples_per_line);
+	public native @Cast("__u32") int sample_format(); public native v4l2_vbi_format sample_format(int sample_format);		/* V4L2_PIX_FMT_* */
+	public native @Cast("__s32") int start(int i); public native v4l2_vbi_format start(int i, int start);
+	@MemberGetter public native @Cast("__s32*") IntPointer start();
+	public native @Cast("__u32") int count(int i); public native v4l2_vbi_format count(int i, int count);
+	@MemberGetter public native @Cast("__u32*") IntPointer count();
+	public native @Cast("__u32") int flags(); public native v4l2_vbi_format flags(int flags);			/* V4L2_VBI_* */
+	public native @Cast("__u32") int reserved(int i); public native v4l2_vbi_format reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();		/* must be zero */
+}
+
+/*  VBI flags  */
+public static final int V4L2_VBI_UNSYNC =		(1 << 0);
+public static final int V4L2_VBI_INTERLACED =	(1 << 1);
+
+/* ITU-R start lines for each field */
+public static final int V4L2_VBI_ITU_525_F1_START = (1);
+public static final int V4L2_VBI_ITU_525_F2_START = (264);
+public static final int V4L2_VBI_ITU_625_F1_START = (1);
+public static final int V4L2_VBI_ITU_625_F2_START = (314);
+
+/* Sliced VBI
+ *
+ *    This implements is a proposal V4L2 API to allow SLICED VBI
+ * required for some hardware encoders. It should change without
+ * notice in the definitive implementation.
+ */
+
+public static class v4l2_sliced_vbi_format extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_sliced_vbi_format() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_sliced_vbi_format(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_sliced_vbi_format(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_sliced_vbi_format position(long position) {
+        return (v4l2_sliced_vbi_format)super.position(position);
+    }
+
+	public native @Cast("__u16") short service_set(); public native v4l2_sliced_vbi_format service_set(short service_set);
+	/* service_lines[0][...] specifies lines 0-23 (1-23 used) of the first field
+	   service_lines[1][...] specifies lines 0-23 (1-23 used) of the second field
+				 (equals frame lines 313-336 for 625 line video
+				  standards, 263-286 for 525 line standards) */
+	public native @Cast("__u16") short service_lines(int i, int j); public native v4l2_sliced_vbi_format service_lines(int i, int j, short service_lines);
+	@MemberGetter public native @Cast("__u16(* /*[2]*/ )[24]") ShortPointer service_lines();
+	public native @Cast("__u32") int io_size(); public native v4l2_sliced_vbi_format io_size(int io_size);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_sliced_vbi_format reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();            /* must be zero */
+}
+
+/* Teletext World System Teletext
+   (WST), defined on ITU-R BT.653-2 */
+public static final int V4L2_SLICED_TELETEXT_B =          (0x0001);
+/* Video Program System, defined on ETS 300 231*/
+public static final int V4L2_SLICED_VPS =                 (0x0400);
+/* Closed Caption, defined on EIA-608 */
+public static final int V4L2_SLICED_CAPTION_525 =         (0x1000);
+/* Wide Screen System, defined on ITU-R BT1119.1 */
+public static final int V4L2_SLICED_WSS_625 =             (0x4000);
+
+public static final int V4L2_SLICED_VBI_525 =             (V4L2_SLICED_CAPTION_525);
+public static final int V4L2_SLICED_VBI_625 =             (V4L2_SLICED_TELETEXT_B | V4L2_SLICED_VPS | V4L2_SLICED_WSS_625);
+
+public static class v4l2_sliced_vbi_cap extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_sliced_vbi_cap() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_sliced_vbi_cap(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_sliced_vbi_cap(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_sliced_vbi_cap position(long position) {
+        return (v4l2_sliced_vbi_cap)super.position(position);
+    }
+
+	public native @Cast("__u16") short service_set(); public native v4l2_sliced_vbi_cap service_set(short service_set);
+	/* service_lines[0][...] specifies lines 0-23 (1-23 used) of the first field
+	   service_lines[1][...] specifies lines 0-23 (1-23 used) of the second field
+				 (equals frame lines 313-336 for 625 line video
+				  standards, 263-286 for 525 line standards) */
+	public native @Cast("__u16") short service_lines(int i, int j); public native v4l2_sliced_vbi_cap service_lines(int i, int j, short service_lines);
+	@MemberGetter public native @Cast("__u16(* /*[2]*/ )[24]") ShortPointer service_lines();
+	public native @Cast("__u32") int type(); public native v4l2_sliced_vbi_cap type(int type);		/* enum v4l2_buf_type */
+	public native @Cast("__u32") int reserved(int i); public native v4l2_sliced_vbi_cap reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();    /* must be 0 */
+}
+
+public static class v4l2_sliced_vbi_data extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_sliced_vbi_data() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_sliced_vbi_data(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_sliced_vbi_data(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_sliced_vbi_data position(long position) {
+        return (v4l2_sliced_vbi_data)super.position(position);
+    }
+
+	public native @Cast("__u32") int id(); public native v4l2_sliced_vbi_data id(int id);
+	public native @Cast("__u32") int field(); public native v4l2_sliced_vbi_data field(int field);          /* 0: first field, 1: second field */
+	public native @Cast("__u32") int line(); public native v4l2_sliced_vbi_data line(int line);           /* 1-23 */
+	public native @Cast("__u32") int reserved(); public native v4l2_sliced_vbi_data reserved(int reserved);       /* must be 0 */
+	public native @Cast("__u8") short data(int i); public native v4l2_sliced_vbi_data data(int i, short data);
+	@MemberGetter public native @Cast("__u8*") ShortPointer data();
+}
+
+/*
+ * Sliced VBI data inserted into MPEG Streams
+ */
+
+/*
+ * V4L2_MPEG_STREAM_VBI_FMT_IVTV:
+ *
+ * Structure of payload contained in an MPEG 2 Private Stream 1 PES Packet in an
+ * MPEG-2 Program Pack that contains V4L2_MPEG_STREAM_VBI_FMT_IVTV Sliced VBI
+ * data
+ *
+ * Note, the MPEG-2 Program Pack and Private Stream 1 PES packet header
+ * definitions are not included here.  See the MPEG-2 specifications for details
+ * on these headers.
+ */
+
+/* Line type IDs */
+public static final int V4L2_MPEG_VBI_IVTV_TELETEXT_B =     (1);
+public static final int V4L2_MPEG_VBI_IVTV_CAPTION_525 =    (4);
+public static final int V4L2_MPEG_VBI_IVTV_WSS_625 =        (5);
+public static final int V4L2_MPEG_VBI_IVTV_VPS =            (7);
+
+public static class v4l2_mpeg_vbi_itv0_line extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_mpeg_vbi_itv0_line() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_mpeg_vbi_itv0_line(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_mpeg_vbi_itv0_line(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_mpeg_vbi_itv0_line position(long position) {
+        return (v4l2_mpeg_vbi_itv0_line)super.position(position);
+    }
+
+	public native @Cast("__u8") short id(); public native v4l2_mpeg_vbi_itv0_line id(short id);	/* One of V4L2_MPEG_VBI_IVTV_* above */
+	public native @Cast("__u8") short data(int i); public native v4l2_mpeg_vbi_itv0_line data(int i, short data);
+	@MemberGetter public native @Cast("__u8*") ShortPointer data();	/* Sliced VBI data for the line */
+} 
+
+public static class v4l2_mpeg_vbi_itv0 extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_mpeg_vbi_itv0() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_mpeg_vbi_itv0(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_mpeg_vbi_itv0(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_mpeg_vbi_itv0 position(long position) {
+        return (v4l2_mpeg_vbi_itv0)super.position(position);
+    }
+
+	public native @Cast("__le32") int linemask(int i); public native v4l2_mpeg_vbi_itv0 linemask(int i, int linemask);
+	@MemberGetter public native @Cast("__le32*") IntPointer linemask(); /* Bitmasks of VBI service lines present */
+	public native @ByRef v4l2_mpeg_vbi_itv0_line line(int i); public native v4l2_mpeg_vbi_itv0 line(int i, v4l2_mpeg_vbi_itv0_line line);
+	@MemberGetter public native v4l2_mpeg_vbi_itv0_line line();
+} 
+
+public static class v4l2_mpeg_vbi_ITV0 extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_mpeg_vbi_ITV0() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_mpeg_vbi_ITV0(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_mpeg_vbi_ITV0(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_mpeg_vbi_ITV0 position(long position) {
+        return (v4l2_mpeg_vbi_ITV0)super.position(position);
+    }
+
+	public native @ByRef v4l2_mpeg_vbi_itv0_line line(int i); public native v4l2_mpeg_vbi_ITV0 line(int i, v4l2_mpeg_vbi_itv0_line line);
+	@MemberGetter public native v4l2_mpeg_vbi_itv0_line line();
+} 
+
+public static final String V4L2_MPEG_VBI_IVTV_MAGIC0 =	"itv0";
+public static final String V4L2_MPEG_VBI_IVTV_MAGIC1 =	"ITV0";
+
+public static class v4l2_mpeg_vbi_fmt_ivtv extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_mpeg_vbi_fmt_ivtv() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_mpeg_vbi_fmt_ivtv(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_mpeg_vbi_fmt_ivtv(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_mpeg_vbi_fmt_ivtv position(long position) {
+        return (v4l2_mpeg_vbi_fmt_ivtv)super.position(position);
+    }
+
+	public native @Cast("__u8") short magic(int i); public native v4l2_mpeg_vbi_fmt_ivtv magic(int i, short magic);
+	@MemberGetter public native @Cast("__u8*") ShortPointer magic();
+		public native @ByRef v4l2_mpeg_vbi_itv0 itv0(); public native v4l2_mpeg_vbi_fmt_ivtv itv0(v4l2_mpeg_vbi_itv0 itv0);
+		public native @ByRef v4l2_mpeg_vbi_ITV0 ITV0(); public native v4l2_mpeg_vbi_fmt_ivtv ITV0(v4l2_mpeg_vbi_ITV0 ITV0);
+} 
+
+/*
+ *	A G G R E G A T E   S T R U C T U R E S
+ */
+
+/**
+ * struct v4l2_plane_pix_format - additional, per-plane format definition
+ * \sizeimage:		maximum size in bytes required for data, for which
+ *			this plane will be used
+ * \bytesperline:	distance in bytes between the leftmost pixels in two
+ *			adjacent lines
+ */
+public static class v4l2_plane_pix_format extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_plane_pix_format() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_plane_pix_format(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_plane_pix_format(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_plane_pix_format position(long position) {
+        return (v4l2_plane_pix_format)super.position(position);
+    }
+
+	public native @Cast("__u32") int sizeimage(); public native v4l2_plane_pix_format sizeimage(int sizeimage);
+	public native @Cast("__u32") int bytesperline(); public native v4l2_plane_pix_format bytesperline(int bytesperline);
+	public native @Cast("__u16") short reserved(int i); public native v4l2_plane_pix_format reserved(int i, short reserved);
+	@MemberGetter public native @Cast("__u16*") ShortPointer reserved();
+} 
+
+/**
+ * struct v4l2_pix_format_mplane - multiplanar format definition
+ * \width:		image width in pixels
+ * \height:		image height in pixels
+ * \pixelformat:	little endian four character code (fourcc)
+ * \field:		enum v4l2_field; field order (for interlaced video)
+ * \colorspace:		enum v4l2_colorspace; supplemental to pixelformat
+ * \plane_fmt:		per-plane information
+ * \num_planes:		number of planes for this format
+ * \flags:		format flags (V4L2_PIX_FMT_FLAG_*)
+ * \ycbcr_enc:		enum v4l2_ycbcr_encoding, Y'CbCr encoding
+ * \quantization:	enum v4l2_quantization, colorspace quantization
+ * \xfer_func:		enum v4l2_xfer_func, colorspace transfer function
+ */
+public static class v4l2_pix_format_mplane extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_pix_format_mplane() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_pix_format_mplane(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_pix_format_mplane(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_pix_format_mplane position(long position) {
+        return (v4l2_pix_format_mplane)super.position(position);
+    }
+
+	public native @Cast("__u32") int width(); public native v4l2_pix_format_mplane width(int width);
+	public native @Cast("__u32") int height(); public native v4l2_pix_format_mplane height(int height);
+	public native @Cast("__u32") int pixelformat(); public native v4l2_pix_format_mplane pixelformat(int pixelformat);
+	public native @Cast("__u32") int field(); public native v4l2_pix_format_mplane field(int field);
+	public native @Cast("__u32") int colorspace(); public native v4l2_pix_format_mplane colorspace(int colorspace);
+
+	public native @ByRef v4l2_plane_pix_format plane_fmt(int i); public native v4l2_pix_format_mplane plane_fmt(int i, v4l2_plane_pix_format plane_fmt);
+	@MemberGetter public native v4l2_plane_pix_format plane_fmt();
+	public native @Cast("__u8") short num_planes(); public native v4l2_pix_format_mplane num_planes(short num_planes);
+	public native @Cast("__u8") short flags(); public native v4l2_pix_format_mplane flags(short flags);
+		public native @Cast("__u8") short ycbcr_enc(); public native v4l2_pix_format_mplane ycbcr_enc(short ycbcr_enc);
+		public native @Cast("__u8") short hsv_enc(); public native v4l2_pix_format_mplane hsv_enc(short hsv_enc);
+	public native @Cast("__u8") short quantization(); public native v4l2_pix_format_mplane quantization(short quantization);
+	public native @Cast("__u8") short xfer_func(); public native v4l2_pix_format_mplane xfer_func(short xfer_func);
+	public native @Cast("__u8") short reserved(int i); public native v4l2_pix_format_mplane reserved(int i, short reserved);
+	@MemberGetter public native @Cast("__u8*") ShortPointer reserved();
+} 
+
+/**
+ * struct v4l2_sdr_format - SDR format definition
+ * \pixelformat:	little endian four character code (fourcc)
+ * \buffersize:		maximum size in bytes required for data
+ */
+public static class v4l2_sdr_format extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_sdr_format() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_sdr_format(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_sdr_format(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_sdr_format position(long position) {
+        return (v4l2_sdr_format)super.position(position);
+    }
+
+	public native @Cast("__u32") int pixelformat(); public native v4l2_sdr_format pixelformat(int pixelformat);
+	public native @Cast("__u32") int buffersize(); public native v4l2_sdr_format buffersize(int buffersize);
+	public native @Cast("__u8") short reserved(int i); public native v4l2_sdr_format reserved(int i, short reserved);
+	@MemberGetter public native @Cast("__u8*") ShortPointer reserved();
+} 
+
+/**
+ * struct v4l2_meta_format - metadata format definition
+ * \dataformat:		little endian four character code (fourcc)
+ * \buffersize:		maximum size in bytes required for data
+ */
+public static class v4l2_meta_format extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_meta_format() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_meta_format(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_meta_format(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_meta_format position(long position) {
+        return (v4l2_meta_format)super.position(position);
+    }
+
+	public native @Cast("__u32") int dataformat(); public native v4l2_meta_format dataformat(int dataformat);
+	public native @Cast("__u32") int buffersize(); public native v4l2_meta_format buffersize(int buffersize);
+} 
+
+/**
+ * struct v4l2_format - stream data format
+ * \type:	enum v4l2_buf_type; type of the data stream
+ * \pix:	definition of an image format
+ * \pix_mp:	definition of a multiplanar image format
+ * \win:	definition of an overlaid image
+ * \vbi:	raw VBI capture or output parameters
+ * \sliced:	sliced VBI capture or output parameters
+ * \raw_data:	placeholder for future extensions and custom formats
+ */
+public static class v4l2_format extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_format() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_format(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_format(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_format position(long position) {
+        return (v4l2_format)super.position(position);
+    }
+
+	public native @Cast("__u32") int type(); public native v4l2_format type(int type);
+		@Name("fmt.pix") public native @ByRef v4l2_pix_format fmt_pix(); public native v4l2_format fmt_pix(v4l2_pix_format fmt_pix);     /* V4L2_BUF_TYPE_VIDEO_CAPTURE */
+		@Name("fmt.pix_mp") public native @ByRef v4l2_pix_format_mplane fmt_pix_mp(); public native v4l2_format fmt_pix_mp(v4l2_pix_format_mplane fmt_pix_mp);  /* V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE */
+		@Name("fmt.win") public native @ByRef v4l2_window fmt_win(); public native v4l2_format fmt_win(v4l2_window fmt_win);     /* V4L2_BUF_TYPE_VIDEO_OVERLAY */
+		@Name("fmt.vbi") public native @ByRef v4l2_vbi_format fmt_vbi(); public native v4l2_format fmt_vbi(v4l2_vbi_format fmt_vbi);     /* V4L2_BUF_TYPE_VBI_CAPTURE */
+		@Name("fmt.sliced") public native @ByRef v4l2_sliced_vbi_format fmt_sliced(); public native v4l2_format fmt_sliced(v4l2_sliced_vbi_format fmt_sliced);  /* V4L2_BUF_TYPE_SLICED_VBI_CAPTURE */
+		@Name("fmt.sdr") public native @ByRef v4l2_sdr_format fmt_sdr(); public native v4l2_format fmt_sdr(v4l2_sdr_format fmt_sdr);     /* V4L2_BUF_TYPE_SDR_CAPTURE */
+		@Name("fmt.meta") public native @ByRef v4l2_meta_format fmt_meta(); public native v4l2_format fmt_meta(v4l2_meta_format fmt_meta);    /* V4L2_BUF_TYPE_META_CAPTURE */
+		@Name("fmt.raw_data") public native @Cast("__u8") short fmt_raw_data(int i); public native v4l2_format fmt_raw_data(int i, short fmt_raw_data);
+		@Name("fmt.raw_data") @MemberGetter public native @Cast("__u8*") ShortPointer fmt_raw_data();                   /* user-defined */
+}
+
+/*	Stream type-dependent parameters
+ */
+public static class v4l2_streamparm extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_streamparm() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_streamparm(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_streamparm(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_streamparm position(long position) {
+        return (v4l2_streamparm)super.position(position);
+    }
+
+	public native @Cast("__u32") int type(); public native v4l2_streamparm type(int type);			/* enum v4l2_buf_type */
+		@Name("parm.capture") public native @ByRef v4l2_captureparm parm_capture(); public native v4l2_streamparm parm_capture(v4l2_captureparm parm_capture);
+		@Name("parm.output") public native @ByRef v4l2_outputparm parm_output(); public native v4l2_streamparm parm_output(v4l2_outputparm parm_output);
+		@Name("parm.raw_data") public native @Cast("__u8") short parm_raw_data(int i); public native v4l2_streamparm parm_raw_data(int i, short parm_raw_data);
+		@Name("parm.raw_data") @MemberGetter public native @Cast("__u8*") ShortPointer parm_raw_data();  /* user-defined */
+}
+
+/*
+ *	E V E N T S
+ */
+
+public static final int V4L2_EVENT_ALL =				0;
+public static final int V4L2_EVENT_VSYNC =			1;
+public static final int V4L2_EVENT_EOS =				2;
+public static final int V4L2_EVENT_CTRL =				3;
+public static final int V4L2_EVENT_FRAME_SYNC =			4;
+public static final int V4L2_EVENT_SOURCE_CHANGE =		5;
+public static final int V4L2_EVENT_MOTION_DET =			6;
+public static final int V4L2_EVENT_PRIVATE_START =		0x08000000;
+
+/* Payload for V4L2_EVENT_VSYNC */
+public static class v4l2_event_vsync extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_event_vsync() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_event_vsync(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_event_vsync(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_event_vsync position(long position) {
+        return (v4l2_event_vsync)super.position(position);
+    }
+
+	/* Can be V4L2_FIELD_ANY, _NONE, _TOP or _BOTTOM */
+	public native @Cast("__u8") short field(); public native v4l2_event_vsync field(short field);
+} 
+
+/* Payload for V4L2_EVENT_CTRL */
+public static final int V4L2_EVENT_CTRL_CH_VALUE =		(1 << 0);
+public static final int V4L2_EVENT_CTRL_CH_FLAGS =		(1 << 1);
+public static final int V4L2_EVENT_CTRL_CH_RANGE =		(1 << 2);
+
+public static class v4l2_event_ctrl extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_event_ctrl() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_event_ctrl(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_event_ctrl(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_event_ctrl position(long position) {
+        return (v4l2_event_ctrl)super.position(position);
+    }
+
+	public native @Cast("__u32") int changes(); public native v4l2_event_ctrl changes(int changes);
+	public native @Cast("__u32") int type(); public native v4l2_event_ctrl type(int type);
+		public native @Cast("__s32") int value(); public native v4l2_event_ctrl value(int value);
+		public native @Cast("__s64") long value64(); public native v4l2_event_ctrl value64(long value64);
+	public native @Cast("__u32") int flags(); public native v4l2_event_ctrl flags(int flags);
+	public native @Cast("__s32") int minimum(); public native v4l2_event_ctrl minimum(int minimum);
+	public native @Cast("__s32") int maximum(); public native v4l2_event_ctrl maximum(int maximum);
+	public native @Cast("__s32") int step(); public native v4l2_event_ctrl step(int step);
+	public native @Cast("__s32") int default_value(); public native v4l2_event_ctrl default_value(int default_value);
+}
+
+public static class v4l2_event_frame_sync extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_event_frame_sync() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_event_frame_sync(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_event_frame_sync(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_event_frame_sync position(long position) {
+        return (v4l2_event_frame_sync)super.position(position);
+    }
+
+	public native @Cast("__u32") int frame_sequence(); public native v4l2_event_frame_sync frame_sequence(int frame_sequence);
+}
+
+public static final int V4L2_EVENT_SRC_CH_RESOLUTION =		(1 << 0);
+
+public static class v4l2_event_src_change extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_event_src_change() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_event_src_change(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_event_src_change(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_event_src_change position(long position) {
+        return (v4l2_event_src_change)super.position(position);
+    }
+
+	public native @Cast("__u32") int changes(); public native v4l2_event_src_change changes(int changes);
+}
+
+public static final int V4L2_EVENT_MD_FL_HAVE_FRAME_SEQ =	(1 << 0);
+
+/**
+ * struct v4l2_event_motion_det - motion detection event
+ * \flags:             if V4L2_EVENT_MD_FL_HAVE_FRAME_SEQ is set, then the
+ *                     frame_sequence field is valid.
+ * \frame_sequence:    the frame sequence number associated with this event.
+ * \region_mask:       which regions detected motion.
+ */
+public static class v4l2_event_motion_det extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_event_motion_det() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_event_motion_det(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_event_motion_det(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_event_motion_det position(long position) {
+        return (v4l2_event_motion_det)super.position(position);
+    }
+
+	public native @Cast("__u32") int flags(); public native v4l2_event_motion_det flags(int flags);
+	public native @Cast("__u32") int frame_sequence(); public native v4l2_event_motion_det frame_sequence(int frame_sequence);
+	public native @Cast("__u32") int region_mask(); public native v4l2_event_motion_det region_mask(int region_mask);
+}
+
+public static class v4l2_event extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_event() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_event(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_event(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_event position(long position) {
+        return (v4l2_event)super.position(position);
+    }
+
+	public native @Cast("__u32") int type(); public native v4l2_event type(int type);
+		@Name("u.vsync") public native @ByRef v4l2_event_vsync u_vsync(); public native v4l2_event u_vsync(v4l2_event_vsync u_vsync);
+		@Name("u.ctrl") public native @ByRef v4l2_event_ctrl u_ctrl(); public native v4l2_event u_ctrl(v4l2_event_ctrl u_ctrl);
+		@Name("u.frame_sync") public native @ByRef v4l2_event_frame_sync u_frame_sync(); public native v4l2_event u_frame_sync(v4l2_event_frame_sync u_frame_sync);
+		@Name("u.src_change") public native @ByRef v4l2_event_src_change u_src_change(); public native v4l2_event u_src_change(v4l2_event_src_change u_src_change);
+		@Name("u.motion_det") public native @ByRef v4l2_event_motion_det u_motion_det(); public native v4l2_event u_motion_det(v4l2_event_motion_det u_motion_det);
+		@Name("u.data") public native @Cast("__u8") short u_data(int i); public native v4l2_event u_data(int i, short u_data);
+		@Name("u.data") @MemberGetter public native @Cast("__u8*") ShortPointer u_data();
+	public native @Cast("__u32") int pending(); public native v4l2_event pending(int pending);
+	public native @Cast("__u32") int sequence(); public native v4l2_event sequence(int sequence);
+	public native @ByRef timespec timestamp(); public native v4l2_event timestamp(timespec timestamp);
+	public native @Cast("__u32") int id(); public native v4l2_event id(int id);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_event reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+}
+
+public static final int V4L2_EVENT_SUB_FL_SEND_INITIAL =		(1 << 0);
+public static final int V4L2_EVENT_SUB_FL_ALLOW_FEEDBACK =	(1 << 1);
+
+public static class v4l2_event_subscription extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_event_subscription() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_event_subscription(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_event_subscription(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_event_subscription position(long position) {
+        return (v4l2_event_subscription)super.position(position);
+    }
+
+	public native @Cast("__u32") int type(); public native v4l2_event_subscription type(int type);
+	public native @Cast("__u32") int id(); public native v4l2_event_subscription id(int id);
+	public native @Cast("__u32") int flags(); public native v4l2_event_subscription flags(int flags);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_event_subscription reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+}
+
+/*
+ *	A D V A N C E D   D E B U G G I N G
+ *
+ *	NOTE: EXPERIMENTAL API, NEVER RELY ON THIS IN APPLICATIONS!
+ *	FOR DEBUGGING, TESTING AND INTERNAL USE ONLY!
+ */
+
+/* VIDIOC_DBG_G_REGISTER and VIDIOC_DBG_S_REGISTER */
+
+public static final int V4L2_CHIP_MATCH_BRIDGE =      0;  /* Match against chip ID on the bridge (0 for the bridge) */
+public static final int V4L2_CHIP_MATCH_SUBDEV =      4;  /* Match against subdev index */
+
+/* The following four defines are no longer in use */
+public static final int V4L2_CHIP_MATCH_HOST = V4L2_CHIP_MATCH_BRIDGE;
+public static final int V4L2_CHIP_MATCH_I2C_DRIVER =  1;  /* Match against I2C driver name */
+public static final int V4L2_CHIP_MATCH_I2C_ADDR =    2;  /* Match against I2C 7-bit address */
+public static final int V4L2_CHIP_MATCH_AC97 =        3;  /* Match against ancillary AC97 chip */
+
+public static class v4l2_dbg_match extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_dbg_match() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_dbg_match(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_dbg_match(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_dbg_match position(long position) {
+        return (v4l2_dbg_match)super.position(position);
+    }
+
+	public native @Cast("__u32") int type(); public native v4l2_dbg_match type(int type); /* Match type */     /* Match this chip, meaning determined by type */
+		public native @Cast("__u32") int addr(); public native v4l2_dbg_match addr(int addr);
+		public native @Cast("char") byte name(int i); public native v4l2_dbg_match name(int i, byte name);
+		@MemberGetter public native @Cast("char*") BytePointer name();
+} 
+
+public static class v4l2_dbg_register extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_dbg_register() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_dbg_register(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_dbg_register(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_dbg_register position(long position) {
+        return (v4l2_dbg_register)super.position(position);
+    }
+
+	public native @ByRef v4l2_dbg_match match(); public native v4l2_dbg_register match(v4l2_dbg_match match);
+	public native @Cast("__u32") int size(); public native v4l2_dbg_register size(int size);	/* register size in bytes */
+	public native @Cast("__u64") long reg(); public native v4l2_dbg_register reg(long reg);
+	public native @Cast("__u64") long val(); public native v4l2_dbg_register val(long val);
+} 
+
+public static final int V4L2_CHIP_FL_READABLE = (1 << 0);
+public static final int V4L2_CHIP_FL_WRITABLE = (1 << 1);
+
+/* VIDIOC_DBG_G_CHIP_INFO */
+public static class v4l2_dbg_chip_info extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_dbg_chip_info() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_dbg_chip_info(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_dbg_chip_info(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_dbg_chip_info position(long position) {
+        return (v4l2_dbg_chip_info)super.position(position);
+    }
+
+	public native @ByRef v4l2_dbg_match match(); public native v4l2_dbg_chip_info match(v4l2_dbg_match match);
+	public native @Cast("char") byte name(int i); public native v4l2_dbg_chip_info name(int i, byte name);
+	@MemberGetter public native @Cast("char*") BytePointer name();
+	public native @Cast("__u32") int flags(); public native v4l2_dbg_chip_info flags(int flags);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_dbg_chip_info reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+} 
+
+/**
+ * struct v4l2_create_buffers - VIDIOC_CREATE_BUFS argument
+ * \index:	on return, index of the first created buffer
+ * \count:	entry: number of requested buffers,
+ *		return: number of created buffers
+ * \memory:	enum v4l2_memory; buffer memory type
+ * \format:	frame format, for which buffers are requested
+ * \capabilities: capabilities of this buffer type.
+ * \reserved:	future extensions
+ */
+public static class v4l2_create_buffers extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public v4l2_create_buffers() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public v4l2_create_buffers(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public v4l2_create_buffers(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public v4l2_create_buffers position(long position) {
+        return (v4l2_create_buffers)super.position(position);
+    }
+
+	public native @Cast("__u32") int index(); public native v4l2_create_buffers index(int index);
+	public native @Cast("__u32") int count(); public native v4l2_create_buffers count(int count);
+	public native @Cast("__u32") int memory(); public native v4l2_create_buffers memory(int memory);
+	public native @ByRef v4l2_format format(); public native v4l2_create_buffers format(v4l2_format format);
+	public native @Cast("__u32") int capabilities(); public native v4l2_create_buffers capabilities(int capabilities);
+	public native @Cast("__u32") int reserved(int i); public native v4l2_create_buffers reserved(int i, int reserved);
+	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
+}
+
+/*
+ *	I O C T L   C O D E S   F O R   V I D E O   D E V I C E S
+ *
+ */
+public static native @MemberGetter int VIDIOC_QUERYCAP();
+public static final int VIDIOC_QUERYCAP = VIDIOC_QUERYCAP();
+public static native @MemberGetter int VIDIOC_ENUM_FMT();
+public static final int VIDIOC_ENUM_FMT = VIDIOC_ENUM_FMT();
+public static native @MemberGetter int VIDIOC_G_FMT();
+public static final int VIDIOC_G_FMT = VIDIOC_G_FMT();
+public static native @MemberGetter int VIDIOC_S_FMT();
+public static final int VIDIOC_S_FMT = VIDIOC_S_FMT();
+public static native @MemberGetter int VIDIOC_REQBUFS();
+public static final int VIDIOC_REQBUFS = VIDIOC_REQBUFS();
+public static native @MemberGetter int VIDIOC_QUERYBUF();
+public static final int VIDIOC_QUERYBUF = VIDIOC_QUERYBUF();
+public static native @MemberGetter int VIDIOC_G_FBUF();
+public static final int VIDIOC_G_FBUF = VIDIOC_G_FBUF();
+public static native @MemberGetter int VIDIOC_S_FBUF();
+public static final int VIDIOC_S_FBUF = VIDIOC_S_FBUF();
+public static native @MemberGetter int VIDIOC_OVERLAY();
+public static final int VIDIOC_OVERLAY = VIDIOC_OVERLAY();
+public static native @MemberGetter int VIDIOC_QBUF();
+public static final int VIDIOC_QBUF = VIDIOC_QBUF();
+public static native @MemberGetter int VIDIOC_EXPBUF();
+public static final int VIDIOC_EXPBUF = VIDIOC_EXPBUF();
+public static native @MemberGetter int VIDIOC_DQBUF();
+public static final int VIDIOC_DQBUF = VIDIOC_DQBUF();
+public static native @MemberGetter int VIDIOC_STREAMON();
+public static final int VIDIOC_STREAMON = VIDIOC_STREAMON();
+public static native @MemberGetter int VIDIOC_STREAMOFF();
+public static final int VIDIOC_STREAMOFF = VIDIOC_STREAMOFF();
+public static native @MemberGetter int VIDIOC_G_PARM();
+public static final int VIDIOC_G_PARM = VIDIOC_G_PARM();
+public static native @MemberGetter int VIDIOC_S_PARM();
+public static final int VIDIOC_S_PARM = VIDIOC_S_PARM();
+public static native @MemberGetter int VIDIOC_G_STD();
+public static final int VIDIOC_G_STD = VIDIOC_G_STD();
+public static native @MemberGetter int VIDIOC_S_STD();
+public static final int VIDIOC_S_STD = VIDIOC_S_STD();
+public static native @MemberGetter int VIDIOC_ENUMSTD();
+public static final int VIDIOC_ENUMSTD = VIDIOC_ENUMSTD();
+public static native @MemberGetter int VIDIOC_ENUMINPUT();
+public static final int VIDIOC_ENUMINPUT = VIDIOC_ENUMINPUT();
+public static native @MemberGetter int VIDIOC_G_CTRL();
+public static final int VIDIOC_G_CTRL = VIDIOC_G_CTRL();
+public static native @MemberGetter int VIDIOC_S_CTRL();
+public static final int VIDIOC_S_CTRL = VIDIOC_S_CTRL();
+public static native @MemberGetter int VIDIOC_G_TUNER();
+public static final int VIDIOC_G_TUNER = VIDIOC_G_TUNER();
+public static native @MemberGetter int VIDIOC_S_TUNER();
+public static final int VIDIOC_S_TUNER = VIDIOC_S_TUNER();
+public static native @MemberGetter int VIDIOC_G_AUDIO();
+public static final int VIDIOC_G_AUDIO = VIDIOC_G_AUDIO();
+public static native @MemberGetter int VIDIOC_S_AUDIO();
+public static final int VIDIOC_S_AUDIO = VIDIOC_S_AUDIO();
+public static native @MemberGetter int VIDIOC_QUERYCTRL();
+public static final int VIDIOC_QUERYCTRL = VIDIOC_QUERYCTRL();
+public static native @MemberGetter int VIDIOC_QUERYMENU();
+public static final int VIDIOC_QUERYMENU = VIDIOC_QUERYMENU();
+public static native @MemberGetter int VIDIOC_G_INPUT();
+public static final int VIDIOC_G_INPUT = VIDIOC_G_INPUT();
+public static native @MemberGetter int VIDIOC_S_INPUT();
+public static final int VIDIOC_S_INPUT = VIDIOC_S_INPUT();
+public static native @MemberGetter int VIDIOC_G_EDID();
+public static final int VIDIOC_G_EDID = VIDIOC_G_EDID();
+public static native @MemberGetter int VIDIOC_S_EDID();
+public static final int VIDIOC_S_EDID = VIDIOC_S_EDID();
+public static native @MemberGetter int VIDIOC_G_OUTPUT();
+public static final int VIDIOC_G_OUTPUT = VIDIOC_G_OUTPUT();
+public static native @MemberGetter int VIDIOC_S_OUTPUT();
+public static final int VIDIOC_S_OUTPUT = VIDIOC_S_OUTPUT();
+public static native @MemberGetter int VIDIOC_ENUMOUTPUT();
+public static final int VIDIOC_ENUMOUTPUT = VIDIOC_ENUMOUTPUT();
+public static native @MemberGetter int VIDIOC_G_AUDOUT();
+public static final int VIDIOC_G_AUDOUT = VIDIOC_G_AUDOUT();
+public static native @MemberGetter int VIDIOC_S_AUDOUT();
+public static final int VIDIOC_S_AUDOUT = VIDIOC_S_AUDOUT();
+public static native @MemberGetter int VIDIOC_G_MODULATOR();
+public static final int VIDIOC_G_MODULATOR = VIDIOC_G_MODULATOR();
+public static native @MemberGetter int VIDIOC_S_MODULATOR();
+public static final int VIDIOC_S_MODULATOR = VIDIOC_S_MODULATOR();
+public static native @MemberGetter int VIDIOC_G_FREQUENCY();
+public static final int VIDIOC_G_FREQUENCY = VIDIOC_G_FREQUENCY();
+public static native @MemberGetter int VIDIOC_S_FREQUENCY();
+public static final int VIDIOC_S_FREQUENCY = VIDIOC_S_FREQUENCY();
+public static native @MemberGetter int VIDIOC_CROPCAP();
+public static final int VIDIOC_CROPCAP = VIDIOC_CROPCAP();
+public static native @MemberGetter int VIDIOC_G_CROP();
+public static final int VIDIOC_G_CROP = VIDIOC_G_CROP();
+public static native @MemberGetter int VIDIOC_S_CROP();
+public static final int VIDIOC_S_CROP = VIDIOC_S_CROP();
+public static native @MemberGetter int VIDIOC_G_JPEGCOMP();
+public static final int VIDIOC_G_JPEGCOMP = VIDIOC_G_JPEGCOMP();
+public static native @MemberGetter int VIDIOC_S_JPEGCOMP();
+public static final int VIDIOC_S_JPEGCOMP = VIDIOC_S_JPEGCOMP();
+public static native @MemberGetter int VIDIOC_QUERYSTD();
+public static final int VIDIOC_QUERYSTD = VIDIOC_QUERYSTD();
+public static native @MemberGetter int VIDIOC_TRY_FMT();
+public static final int VIDIOC_TRY_FMT = VIDIOC_TRY_FMT();
+public static native @MemberGetter int VIDIOC_ENUMAUDIO();
+public static final int VIDIOC_ENUMAUDIO = VIDIOC_ENUMAUDIO();
+public static native @MemberGetter int VIDIOC_ENUMAUDOUT();
+public static final int VIDIOC_ENUMAUDOUT = VIDIOC_ENUMAUDOUT();
+public static native @MemberGetter int VIDIOC_G_PRIORITY();
+public static final int VIDIOC_G_PRIORITY = VIDIOC_G_PRIORITY(); /* enum v4l2_priority */
+public static native @MemberGetter int VIDIOC_S_PRIORITY();
+public static final int VIDIOC_S_PRIORITY = VIDIOC_S_PRIORITY(); /* enum v4l2_priority */
+public static native @MemberGetter int VIDIOC_G_SLICED_VBI_CAP();
+public static final int VIDIOC_G_SLICED_VBI_CAP = VIDIOC_G_SLICED_VBI_CAP();
+public static native @MemberGetter int VIDIOC_LOG_STATUS();
+public static final int VIDIOC_LOG_STATUS = VIDIOC_LOG_STATUS();
+public static native @MemberGetter int VIDIOC_G_EXT_CTRLS();
+public static final int VIDIOC_G_EXT_CTRLS = VIDIOC_G_EXT_CTRLS();
+public static native @MemberGetter int VIDIOC_S_EXT_CTRLS();
+public static final int VIDIOC_S_EXT_CTRLS = VIDIOC_S_EXT_CTRLS();
+public static native @MemberGetter int VIDIOC_TRY_EXT_CTRLS();
+public static final int VIDIOC_TRY_EXT_CTRLS = VIDIOC_TRY_EXT_CTRLS();
+public static native @MemberGetter int VIDIOC_ENUM_FRAMESIZES();
+public static final int VIDIOC_ENUM_FRAMESIZES = VIDIOC_ENUM_FRAMESIZES();
+public static native @MemberGetter int VIDIOC_ENUM_FRAMEINTERVALS();
+public static final int VIDIOC_ENUM_FRAMEINTERVALS = VIDIOC_ENUM_FRAMEINTERVALS();
+public static native @MemberGetter int VIDIOC_G_ENC_INDEX();
+public static final int VIDIOC_G_ENC_INDEX = VIDIOC_G_ENC_INDEX();
+public static native @MemberGetter int VIDIOC_ENCODER_CMD();
+public static final int VIDIOC_ENCODER_CMD = VIDIOC_ENCODER_CMD();
+public static native @MemberGetter int VIDIOC_TRY_ENCODER_CMD();
+public static final int VIDIOC_TRY_ENCODER_CMD = VIDIOC_TRY_ENCODER_CMD();
+
+/*
+ * Experimental, meant for debugging, testing and internal use.
+ * Only implemented if CONFIG_VIDEO_ADV_DEBUG is defined.
+ * You must be root to use these ioctls. Never use these in applications!
+ */
+public static native @MemberGetter int VIDIOC_DBG_S_REGISTER();
+public static final int VIDIOC_DBG_S_REGISTER = VIDIOC_DBG_S_REGISTER();
+public static native @MemberGetter int VIDIOC_DBG_G_REGISTER();
+public static final int VIDIOC_DBG_G_REGISTER = VIDIOC_DBG_G_REGISTER();
+
+public static native @MemberGetter int VIDIOC_S_HW_FREQ_SEEK();
+public static final int VIDIOC_S_HW_FREQ_SEEK = VIDIOC_S_HW_FREQ_SEEK();
+public static native @MemberGetter int VIDIOC_S_DV_TIMINGS();
+public static final int VIDIOC_S_DV_TIMINGS = VIDIOC_S_DV_TIMINGS();
+public static native @MemberGetter int VIDIOC_G_DV_TIMINGS();
+public static final int VIDIOC_G_DV_TIMINGS = VIDIOC_G_DV_TIMINGS();
+public static native @MemberGetter int VIDIOC_DQEVENT();
+public static final int VIDIOC_DQEVENT = VIDIOC_DQEVENT();
+public static native @MemberGetter int VIDIOC_SUBSCRIBE_EVENT();
+public static final int VIDIOC_SUBSCRIBE_EVENT = VIDIOC_SUBSCRIBE_EVENT();
+public static native @MemberGetter int VIDIOC_UNSUBSCRIBE_EVENT();
+public static final int VIDIOC_UNSUBSCRIBE_EVENT = VIDIOC_UNSUBSCRIBE_EVENT();
+public static native @MemberGetter int VIDIOC_CREATE_BUFS();
+public static final int VIDIOC_CREATE_BUFS = VIDIOC_CREATE_BUFS();
+public static native @MemberGetter int VIDIOC_PREPARE_BUF();
+public static final int VIDIOC_PREPARE_BUF = VIDIOC_PREPARE_BUF();
+public static native @MemberGetter int VIDIOC_G_SELECTION();
+public static final int VIDIOC_G_SELECTION = VIDIOC_G_SELECTION();
+public static native @MemberGetter int VIDIOC_S_SELECTION();
+public static final int VIDIOC_S_SELECTION = VIDIOC_S_SELECTION();
+public static native @MemberGetter int VIDIOC_DECODER_CMD();
+public static final int VIDIOC_DECODER_CMD = VIDIOC_DECODER_CMD();
+public static native @MemberGetter int VIDIOC_TRY_DECODER_CMD();
+public static final int VIDIOC_TRY_DECODER_CMD = VIDIOC_TRY_DECODER_CMD();
+public static native @MemberGetter int VIDIOC_ENUM_DV_TIMINGS();
+public static final int VIDIOC_ENUM_DV_TIMINGS = VIDIOC_ENUM_DV_TIMINGS();
+public static native @MemberGetter int VIDIOC_QUERY_DV_TIMINGS();
+public static final int VIDIOC_QUERY_DV_TIMINGS = VIDIOC_QUERY_DV_TIMINGS();
+public static native @MemberGetter int VIDIOC_DV_TIMINGS_CAP();
+public static final int VIDIOC_DV_TIMINGS_CAP = VIDIOC_DV_TIMINGS_CAP();
+public static native @MemberGetter int VIDIOC_ENUM_FREQ_BANDS();
+public static final int VIDIOC_ENUM_FREQ_BANDS = VIDIOC_ENUM_FREQ_BANDS();
+
+/*
+ * Experimental, meant for debugging, testing and internal use.
+ * Never use this in applications!
+ */
+public static native @MemberGetter int VIDIOC_DBG_G_CHIP_INFO();
+public static final int VIDIOC_DBG_G_CHIP_INFO = VIDIOC_DBG_G_CHIP_INFO();
+
+public static native @MemberGetter int VIDIOC_QUERY_EXT_CTRL();
+public static final int VIDIOC_QUERY_EXT_CTRL = VIDIOC_QUERY_EXT_CTRL();
+
+/* Reminder: when adding new ioctls please add support for them to
+   drivers/media/v4l2-core/v4l2-compat-ioctl32.c as well! */
+
+public static final int BASE_VIDIOC_PRIVATE =	192;		/* 192-255 are private */
+
+// #endif /* _UAPI__LINUX_VIDEODEV2_H */
+
+
 }
