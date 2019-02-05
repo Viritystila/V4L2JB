@@ -2005,7 +2005,7 @@ public static class v4l2_bt_timings extends Pointer {
 	public native @Cast("__u8") short hdmi_vic(); public native v4l2_bt_timings hdmi_vic(short hdmi_vic);
 	public native @Cast("__u8") short reserved(int i); public native v4l2_bt_timings reserved(int i, short reserved);
 	@MemberGetter public native @Cast("__u8*") ShortPointer reserved();
-} 
+}
 
 /* Interlaced or progressive format */
 public static final int V4L2_DV_PROGRESSIVE =	0;
@@ -2737,7 +2737,7 @@ public static class v4l2_rds_data extends Pointer {
 	public native @Cast("__u8") short lsb(); public native v4l2_rds_data lsb(short lsb);
 	public native @Cast("__u8") short msb(); public native v4l2_rds_data msb(short msb);
 	public native @Cast("__u8") short block(); public native v4l2_rds_data block(short block);
-} 
+} //__attribute__ ((packed));
 
 public static final int V4L2_RDS_BLOCK_MSK =	 0x7;
 public static final int V4L2_RDS_BLOCK_A =	 0;

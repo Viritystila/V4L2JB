@@ -13,8 +13,8 @@ import org.bytedeco.javacpp.annotation.Platform;
         includepath = {"/usr/include/"},
         //preloadpath = {"/path/to/deps/"},
         linkpath = {"/usr/lib/x86_64-linux-gnu/"},
-        include = {"libv4l2.h"},
         cinclude={"videodev2.h"},
+        include = {"libv4l2.h"},
 
         //preload = {"DependentLib"},
         link = {"v4l2"}
@@ -24,13 +24,28 @@ import org.bytedeco.javacpp.annotation.Platform;
 public class v4l2 implements InfoMapper {
     public void map(InfoMap infoMap) {
         //infoMap.put(new Info("const char").valueTypes("byte").pointerTypes("@Cast(\"const char*\") BytePointer", "String"));
+        //infoMap.put(new Info("__attribute__").cppText(""));
+        //infoMap.put(new Info("v4l2_rds_data").skip());
+        //infoMap.put(new Info("tst").cppTypes().skip());
+        //infoMap.put(new Info("videodev2.h").linePatterns("} ", ";").skip());
+        //infoMap.put(new Info("__attribute__").cppText("#define __attribute__((packed)) ;"));
+        //infoMap.put(new Info("__attribute__ ((packed))").cppTypes().annotations());
+         //infoMap.put(new Info("((packed))").cast().valueTypes("int"));
+         //infoMap.put(new Info("__attribute__ ((packed))").pointerTypes("IntList").define());
+         //infoMap.put(new Info("__attribute__").valueTypes("@Cast(\"v4l2_buf_type\") int"));
+         
         infoMap.put(new Info("EXPORTS", "NOINLINE", "LIBV4L_PUBLIC").cppTypes().annotations());
         infoMap.put(new Info("basic/types").cppTypes("signed", "unsigned", "char", "short", "int", "long", "bool", "float", "double",
 "_Bool", "_Complex", "_Imaginary", "complex", "imaginary"));
         infoMap.put(new Info("ssize_t", "ptrdiff_t", "intptr_t", "uintptr_t", "off_t").cast().valueTypes("long").pointerTypes("SizeTPointer"));
         infoMap.put(new Info("__u8", "__u16", "__uint16_t")
                        .cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"));
-
+                       
+        infoMap.put(new Info ("...").pointerTypes("IntPointer", "IntBuffer", "int[]"));   
+        infoMap.put(new Info ("...").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"));   
+        infoMap.put(new Info("...").valueTypes("@Cast(\"unsigned long int\") long"));
+        infoMap.put(new Info("...").cppText("unsigned long int fmt"));
+                       
         infoMap.put(new Info("socklen_t", "clockid_t", "useconds_t", "id_t", "gid_t", "uid_t", "pid_t", "mode_t",
                              "__socklen_t", "__clockid_t", "__useconds_t", "__id_t", "__gid_t", "__uid_t", "__pid_t", "__mode_t",
                              "error_t", "__u32", "__uint32_t", "__s32", "__le32")
@@ -97,6 +112,34 @@ public class v4l2 implements InfoMapper {
 
         public native long tv_sec(); public native timespec tv_sec (long tv_sec);
         public native long tv_nsec(); public native timespec tv_nsec(long tv_nsec);
+};
+
+        @Name("v4l2_rds_data")
+    public static class v4l2_rds_data extends Pointer {
+        
+        static {
+            Loader.load();
+        }
+        
+        public v4l2_rds_data() {
+            allocate();
+        }
+        
+        public v4l2_rds_data(int size) {
+            allocateArray(size);
+        }
+        
+        public v4l2_rds_data(Pointer p) {
+            super(p);
+        }
+        
+        private native void allocate();
+        private native void allocateArray(int size);
+
+        public native short lsb(); public native v4l2_rds_data lsb (short lsb);
+        public native short msb(); public native v4l2_rds_data msb (short msb);
+        public native short block(); public native v4l2_rds_data block(short block);
+
 };
     
 }
