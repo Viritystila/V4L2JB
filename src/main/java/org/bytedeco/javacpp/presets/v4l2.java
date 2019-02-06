@@ -24,7 +24,7 @@ import org.bytedeco.javacpp.annotation.Platform;
 public class v4l2 implements InfoMapper {
     public void map(InfoMap infoMap) {
         //infoMap.put(new Info("const char").valueTypes("byte").pointerTypes("@Cast(\"const char*\") BytePointer", "String"));
-        //infoMap.put(new Info("__attribute__").cppText(""));
+        //infoMap.put(new Info("__attribute__").skip());
         //infoMap.put(new Info("v4l2_rds_data").skip());
         //infoMap.put(new Info("tst").cppTypes().skip());
         //infoMap.put(new Info("videodev2.h").linePatterns("} ", ";").skip());
@@ -33,6 +33,11 @@ public class v4l2 implements InfoMapper {
          //infoMap.put(new Info("((packed))").cast().valueTypes("int"));
          //infoMap.put(new Info("__attribute__ ((packed))").pointerTypes("IntList").define());
          //infoMap.put(new Info("__attribute__").valueTypes("@Cast(\"v4l2_buf_type\") int"));
+        
+         infoMap.put(new Info("__attribute__").annotations());
+         infoMap.put(new Info("__attribute__ ((packed))").annotations());
+         infoMap.put(new Info("((packed))").annotations());
+
          
         infoMap.put(new Info("EXPORTS", "NOINLINE", "LIBV4L_PUBLIC").cppTypes().annotations());
         infoMap.put(new Info("basic/types").cppTypes("signed", "unsigned", "char", "short", "int", "long", "bool", "float", "double",
@@ -42,7 +47,7 @@ public class v4l2 implements InfoMapper {
                        .cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"));
                        
         infoMap.put(new Info ("...").pointerTypes("IntPointer", "IntBuffer", "int[]"));   
-        infoMap.put(new Info ("...").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"));   
+        infoMap.put(new Info ("...").valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]", "Pointer"));   
         infoMap.put(new Info("...").valueTypes("@Cast(\"unsigned long int\") long"));
         infoMap.put(new Info("...").cppText("unsigned long int fmt"));
                        
@@ -114,32 +119,32 @@ public class v4l2 implements InfoMapper {
         public native long tv_nsec(); public native timespec tv_nsec(long tv_nsec);
 };
 
-        @Name("v4l2_rds_data")
-    public static class v4l2_rds_data extends Pointer {
-        
-        static {
-            Loader.load();
-        }
-        
-        public v4l2_rds_data() {
-            allocate();
-        }
-        
-        public v4l2_rds_data(int size) {
-            allocateArray(size);
-        }
-        
-        public v4l2_rds_data(Pointer p) {
-            super(p);
-        }
-        
-        private native void allocate();
-        private native void allocateArray(int size);
-
-        public native short lsb(); public native v4l2_rds_data lsb (short lsb);
-        public native short msb(); public native v4l2_rds_data msb (short msb);
-        public native short block(); public native v4l2_rds_data block(short block);
-
-};
+//         @Name("v4l2_rds_data")
+//     public static class v4l2_rds_data extends Pointer {
+//         
+//         static {
+//             Loader.load();
+//         }
+//         
+//         public v4l2_rds_data() {
+//             allocate();
+//         }
+//         
+//         public v4l2_rds_data(int size) {
+//             allocateArray(size);
+//         }
+//         
+//         public v4l2_rds_data(Pointer p) {
+//             super(p);
+//         }
+//         
+//         private native void allocate();
+//         private native void allocateArray(int size);
+// 
+//         public native short lsb(); public native v4l2_rds_data lsb (short lsb);
+//         public native short msb(); public native v4l2_rds_data msb (short msb);
+//         public native short block(); public native v4l2_rds_data block(short block);
+// 
+// };
     
 }

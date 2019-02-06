@@ -1838,7 +1838,7 @@ struct v4l2_rds_data {
 	__u8	lsb;
 	__u8	msb;
 	__u8	block;
-} ;//__attribute__ ((packed));
+};// __attribute__ ((packed));
 
 #define V4L2_RDS_BLOCK_MSK	 0x7
 #define V4L2_RDS_BLOCK_A	 0
