@@ -13,6 +13,7 @@ mkdir -p $PLATFORM/include/linux
 
 mkdir -p $PLATFORM/lib
 download https://raw.githubusercontent.com/torvalds/linux/master/include/uapi/linux/videodev2.h videodev2.h
+wget -O compiler.h https://raw.githubusercontent.com/torvalds/linux/master/include/linux/compiler_types.h 
 sed -i -e "s+__attribute__ ((packed))+ ;+g" videodev2.h
 r="$(uname -r)"
 #sed -i -e 's+linux/compiler.h+/usr/src/linux-headers-'$r'/include/linux/compiler.h+g' videodev2.h
@@ -20,7 +21,7 @@ r="$(uname -r)"
 
 #cd $PLATFORM
 cp videodev2.h $PLATFORM/include
-cp ../compiler.h $PLATFORM/include/linux
+cp compiler.h $PLATFORM/include/linux
 
 #cp /usr/src/linux-headers-$r/include/linux/compiler.h $PLATFORM/include/linux
 

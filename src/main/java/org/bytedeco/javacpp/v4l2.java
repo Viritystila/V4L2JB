@@ -192,7 +192,7 @@ public static native int v4l2_fd_open(int fd, int v4l2_flags);
 // #ifndef __KERNEL__
 // #include <sys/time.h>
 // #endif
-// #include </home/mikael/compiler.h>
+// #include <linux/compiler.h>
 // #include <linux/ioctl.h>
 // #include <linux/types.h>
 // #include <linux/v4l2-common.h>
@@ -2005,7 +2005,7 @@ public static class v4l2_bt_timings extends Pointer {
 	public native @Cast("__u8") short hdmi_vic(); public native v4l2_bt_timings hdmi_vic(short hdmi_vic);
 	public native @Cast("__u8") short reserved(int i); public native v4l2_bt_timings reserved(int i, short reserved);
 	@MemberGetter public native @Cast("__u8*") ShortPointer reserved();
-}
+}  
 
 /* Interlaced or progressive format */
 public static final int V4L2_DV_PROGRESSIVE =	0;
@@ -2125,7 +2125,7 @@ public static class v4l2_dv_timings extends Pointer {
 		public native @ByRef v4l2_bt_timings bt(); public native v4l2_dv_timings bt(v4l2_bt_timings bt);
 		public native @Cast("__u32") int reserved(int i); public native v4l2_dv_timings reserved(int i, int reserved);
 		@MemberGetter public native @Cast("__u32*") IntPointer reserved();
-} 
+}  
 
 /* Values for the type field */
 public static final int V4L2_DV_BT_656_1120 =	0;	/* BT.656/1120 timing type */
@@ -2194,7 +2194,7 @@ public static class v4l2_bt_timings_cap extends Pointer {
 	public native @Cast("__u32") int capabilities(); public native v4l2_bt_timings_cap capabilities(int capabilities);
 	public native @Cast("__u32") int reserved(int i); public native v4l2_bt_timings_cap reserved(int i, int reserved);
 	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
-} 
+}  
 
 /* Supports interlaced formats */
 public static final int V4L2_DV_BT_CAP_INTERLACED =	(1 << 0);
@@ -2387,7 +2387,7 @@ public static class v4l2_ext_control extends Pointer {
 		public native @Cast("__u16*") ShortPointer p_u16(); public native v4l2_ext_control p_u16(ShortPointer p_u16);
 		public native @Cast("__u32*") IntPointer p_u32(); public native v4l2_ext_control p_u32(IntPointer p_u32);
 		public native Pointer ptr(); public native v4l2_ext_control ptr(Pointer ptr);
-} 
+}  
 
 public static class v4l2_ext_controls extends Pointer {
     static { Loader.load(); }
@@ -2526,7 +2526,7 @@ public static class v4l2_querymenu extends Pointer {
 		@MemberGetter public native @Cast("__u8*") ShortPointer name();	/* Whatever */
 		public native @Cast("__s64") long value(); public native v4l2_querymenu value(long value);
 	public native @Cast("__u32") int reserved(); public native v4l2_querymenu reserved(int reserved);
-} 
+}  
 
 /*  Control flags  */
 public static final int V4L2_CTRL_FLAG_DISABLED =		0x0001;
@@ -2737,7 +2737,7 @@ public static class v4l2_rds_data extends Pointer {
 	public native @Cast("__u8") short lsb(); public native v4l2_rds_data lsb(short lsb);
 	public native @Cast("__u8") short msb(); public native v4l2_rds_data msb(short msb);
 	public native @Cast("__u8") short block(); public native v4l2_rds_data block(short block);
-}// __attribute__ ((packed));
+}  
 
 public static final int V4L2_RDS_BLOCK_MSK =	 0x7;
 public static final int V4L2_RDS_BLOCK_A =	 0;
@@ -3123,7 +3123,7 @@ public static class v4l2_mpeg_vbi_itv0_line extends Pointer {
 	public native @Cast("__u8") short id(); public native v4l2_mpeg_vbi_itv0_line id(short id);	/* One of V4L2_MPEG_VBI_IVTV_* above */
 	public native @Cast("__u8") short data(int i); public native v4l2_mpeg_vbi_itv0_line data(int i, short data);
 	@MemberGetter public native @Cast("__u8*") ShortPointer data();	/* Sliced VBI data for the line */
-} 
+}  
 
 public static class v4l2_mpeg_vbi_itv0 extends Pointer {
     static { Loader.load(); }
@@ -3143,7 +3143,7 @@ public static class v4l2_mpeg_vbi_itv0 extends Pointer {
 	@MemberGetter public native @Cast("__le32*") IntPointer linemask(); /* Bitmasks of VBI service lines present */
 	public native @ByRef v4l2_mpeg_vbi_itv0_line line(int i); public native v4l2_mpeg_vbi_itv0 line(int i, v4l2_mpeg_vbi_itv0_line line);
 	@MemberGetter public native v4l2_mpeg_vbi_itv0_line line();
-} 
+}  
 
 public static class v4l2_mpeg_vbi_ITV0 extends Pointer {
     static { Loader.load(); }
@@ -3161,7 +3161,7 @@ public static class v4l2_mpeg_vbi_ITV0 extends Pointer {
 
 	public native @ByRef v4l2_mpeg_vbi_itv0_line line(int i); public native v4l2_mpeg_vbi_ITV0 line(int i, v4l2_mpeg_vbi_itv0_line line);
 	@MemberGetter public native v4l2_mpeg_vbi_itv0_line line();
-} 
+}  
 
 public static final String V4L2_MPEG_VBI_IVTV_MAGIC0 =	"itv0";
 public static final String V4L2_MPEG_VBI_IVTV_MAGIC1 =	"ITV0";
@@ -3184,7 +3184,7 @@ public static class v4l2_mpeg_vbi_fmt_ivtv extends Pointer {
 	@MemberGetter public native @Cast("__u8*") ShortPointer magic();
 		public native @ByRef v4l2_mpeg_vbi_itv0 itv0(); public native v4l2_mpeg_vbi_fmt_ivtv itv0(v4l2_mpeg_vbi_itv0 itv0);
 		public native @ByRef v4l2_mpeg_vbi_ITV0 ITV0(); public native v4l2_mpeg_vbi_fmt_ivtv ITV0(v4l2_mpeg_vbi_ITV0 ITV0);
-} 
+}  
 
 /*
  *	A G G R E G A T E   S T R U C T U R E S
@@ -3215,7 +3215,7 @@ public static class v4l2_plane_pix_format extends Pointer {
 	public native @Cast("__u32") int bytesperline(); public native v4l2_plane_pix_format bytesperline(int bytesperline);
 	public native @Cast("__u16") short reserved(int i); public native v4l2_plane_pix_format reserved(int i, short reserved);
 	@MemberGetter public native @Cast("__u16*") ShortPointer reserved();
-} 
+}  
 
 /**
  * struct v4l2_pix_format_mplane - multiplanar format definition
@@ -3261,7 +3261,7 @@ public static class v4l2_pix_format_mplane extends Pointer {
 	public native @Cast("__u8") short xfer_func(); public native v4l2_pix_format_mplane xfer_func(short xfer_func);
 	public native @Cast("__u8") short reserved(int i); public native v4l2_pix_format_mplane reserved(int i, short reserved);
 	@MemberGetter public native @Cast("__u8*") ShortPointer reserved();
-} 
+}  
 
 /**
  * struct v4l2_sdr_format - SDR format definition
@@ -3286,7 +3286,7 @@ public static class v4l2_sdr_format extends Pointer {
 	public native @Cast("__u32") int buffersize(); public native v4l2_sdr_format buffersize(int buffersize);
 	public native @Cast("__u8") short reserved(int i); public native v4l2_sdr_format reserved(int i, short reserved);
 	@MemberGetter public native @Cast("__u8*") ShortPointer reserved();
-} 
+}  
 
 /**
  * struct v4l2_meta_format - metadata format definition
@@ -3309,7 +3309,7 @@ public static class v4l2_meta_format extends Pointer {
 
 	public native @Cast("__u32") int dataformat(); public native v4l2_meta_format dataformat(int dataformat);
 	public native @Cast("__u32") int buffersize(); public native v4l2_meta_format buffersize(int buffersize);
-} 
+}  
 
 /**
  * struct v4l2_format - stream data format
@@ -3400,7 +3400,7 @@ public static class v4l2_event_vsync extends Pointer {
 
 	/* Can be V4L2_FIELD_ANY, _NONE, _TOP or _BOTTOM */
 	public native @Cast("__u8") short field(); public native v4l2_event_vsync field(short field);
-} 
+}  
 
 /* Payload for V4L2_EVENT_CTRL */
 public static final int V4L2_EVENT_CTRL_CH_VALUE =		(1 << 0);
@@ -3586,7 +3586,7 @@ public static class v4l2_dbg_match extends Pointer {
 		public native @Cast("__u32") int addr(); public native v4l2_dbg_match addr(int addr);
 		public native @Cast("char") byte name(int i); public native v4l2_dbg_match name(int i, byte name);
 		@MemberGetter public native @Cast("char*") BytePointer name();
-} 
+}  
 
 public static class v4l2_dbg_register extends Pointer {
     static { Loader.load(); }
@@ -3606,7 +3606,7 @@ public static class v4l2_dbg_register extends Pointer {
 	public native @Cast("__u32") int size(); public native v4l2_dbg_register size(int size);	/* register size in bytes */
 	public native @Cast("__u64") long reg(); public native v4l2_dbg_register reg(long reg);
 	public native @Cast("__u64") long val(); public native v4l2_dbg_register val(long val);
-} 
+}  
 
 public static final int V4L2_CHIP_FL_READABLE = (1 << 0);
 public static final int V4L2_CHIP_FL_WRITABLE = (1 << 1);
@@ -3632,7 +3632,7 @@ public static class v4l2_dbg_chip_info extends Pointer {
 	public native @Cast("__u32") int flags(); public native v4l2_dbg_chip_info flags(int flags);
 	public native @Cast("__u32") int reserved(int i); public native v4l2_dbg_chip_info reserved(int i, int reserved);
 	@MemberGetter public native @Cast("__u32*") IntPointer reserved();
-} 
+}  
 
 /**
  * struct v4l2_create_buffers - VIDIOC_CREATE_BUFS argument

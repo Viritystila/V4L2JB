@@ -118,52 +118,57 @@ public class Example
         //long v4l2_read(int fd, Pointer buffer, @Cast("size_t") long n);
         //Pointer buffer =new Pointer();
         //buffer.capacity(bufferinfo.length());
-                ByteBuffer dbt = bufferinfo.asByteBuffer();
-
-                System.out.print("bufferinfo.asByteBuffer() ");
-        System.out.println(bufferinfo.asByteBuffer());
-            dbt.rewind();
-        byte[] arr = new byte[dbt.remaining()];
-        dbt.get(arr);
-        System.out.println(arr);
+//                 ByteBuffer dbt = bufferinfo.asByteBuffer();
+// 
+//                 System.out.print("bufferinfo.asByteBuffer() ");
+//         System.out.println(bufferinfo.asByteBuffer());
+//             dbt.rewind();
+//         byte[] arr = new byte[dbt.remaining()];
+//         dbt.get(arr);
+//         System.out.println(arr);
+//         
+//                      System.out.print("arr.length ");
+//         System.out.println(arr.length);
         
-                     System.out.print("arr.length ");
-        System.out.println(arr.length);
+        BytePointer bff =new BytePointer(bufferinfo.length());
         
         long res =0 ;
-        res=v4l2_read(fd, bufferinfo, 2);
+        res=v4l2_read(fd, bff, bufferinfo.length());
         System.out.print("res ");
         System.out.println(res);
         
-        System.out.print("bufferinfo.memory() ");
-        System.out.println(bufferinfo.memory());
-        
-                System.out.print("bufferinfo.physicalBytes() ");
-        System.out.println(bufferinfo.physicalBytes());
-        
-        dbt = bufferinfo.asByteBuffer();
-        System.out.print("bufferinfo.asByteBuffer() ");
-        System.out.println(bufferinfo.asByteBuffer());
-        
-                System.out.print("bufferinfo.bytesused() ");
-        System.out.println(bufferinfo.bytesused());   
-        
-        
-        dbt.rewind();
-        arr = new byte[dbt.remaining()];
-        dbt.get(arr);
-        System.out.println(arr);
-        
-                           System.out.print("arr.length ");
-        System.out.println(arr.length);
-        
-        try {
-            BufferedImage imag=ImageIO.read(new ByteArrayInputStream(arr));
+//         System.out.print("bufferinfo.memory() ");
+//         System.out.println(bufferinfo.memory());
+//         
+//                 System.out.print("bff.physicalBytes() ");
+//         System.out.println(bufferinfo.physicalBytes());
+//         
+//         dbt = bufferinfo.asByteBuffer();
+//         System.out.print("bufferinfo.asByteBuffer() ");
+//         System.out.println(bufferinfo.asByteBuffer());
+//         
+//                 System.out.print("bufferinfo.bytesused() ");
+//         System.out.println(bufferinfo.bytesused());   
+//         
+//         
+//         dbt.rewind();
+         byte[] arr = new byte[bufferinfo.length()];
+         bff.get(arr);
+         System.out.println(arr);
+//         
+                            System.out.print("arr.length ");
+         System.out.println(arr.length);
+//         
+         try {
+             BufferedImage imag=ImageIO.read(new ByteArrayInputStream(arr));
+            System.out.print("imag ");
+            System.out.println(imag);
             ImageIO.write(imag, "jpg", new File("./","snap.jpg"));
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+ 
+         } catch (IOException e) {
+             throw new RuntimeException(e);
+         }
+         
         //BufferedImage imag=ImageIO.read(new ByteArrayInputStream(arr));
 
         //ByteArrayInputStream bis = new ByteArrayInputStream(arr);
