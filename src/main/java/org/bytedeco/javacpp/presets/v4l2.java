@@ -50,8 +50,9 @@ public class v4l2 implements InfoMapper {
         //infoMap.put(new Info ("...").valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]", "Pointer"));   
         //infoMap.put(new Info("...").valueTypes("@Cast(\"unsigned long int\") long"));
         //infoMap.put(new Info("...").cppText("unsigned long int fmt"));
-        infoMap.put(new Info("v4l2_ioctl").javaText("public static native int v4l2_ioctl(int fd, @Cast(\"unsigned long int\") long request, Pointer fmt);"));
+        infoMap.put(new Info("v4l2_ioctl").javaText("public static native int v4l2_ioctl(int fd, @Cast(\"unsigned long int\") long request, Pointer fmt); \n public static native int v4l2_ioctl(int fd, @Cast(\"unsigned long int\") long request, int fmt);"));
 
+        infoMap.put(new Info("v4l2_mmap").javaText("public static native Pointer v4l2_mmap(Pointer start, @Cast(\"size_t\") long length, int prot, int flags, int fd, @Cast(\"int64_t\") long offset);"));
                        
         infoMap.put(new Info("socklen_t", "clockid_t", "useconds_t", "id_t", "gid_t", "uid_t", "pid_t", "mode_t",
                              "__socklen_t", "__clockid_t", "__useconds_t", "__id_t", "__gid_t", "__uid_t", "__pid_t", "__mode_t",

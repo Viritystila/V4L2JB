@@ -76,11 +76,11 @@ public static native int v4l2_open(@Cast("const char*") BytePointer file, int of
 public static native int v4l2_open(String file, int oflag);
 public static native int v4l2_close(int fd);
 public static native int v4l2_dup(int fd);
-public static native int v4l2_ioctl(int fd, @Cast("unsigned long int") long request, Pointer fmt);
+public static native int v4l2_ioctl(int fd, @Cast("unsigned long int") long request, Pointer fmt); 
+ public static native int v4l2_ioctl(int fd, @Cast("unsigned long int") long request, int fmt);
 public static native @Cast("ssize_t") long v4l2_read(int fd, Pointer buffer, @Cast("size_t") long n);
 public static native @Cast("ssize_t") long v4l2_write(int fd, @Const Pointer buffer, @Cast("size_t") long n);
-public static native Pointer v4l2_mmap(Pointer start, @Cast("size_t") long length, int prot, int flags,
-		int fd, @Cast("int64_t") long offset);
+public static native Pointer v4l2_mmap(Pointer start, @Cast("size_t") long length, int prot, int flags, int fd, @Cast("int64_t") long offset);
 public static native int v4l2_munmap(Pointer _start, @Cast("size_t") long length);
 
 
