@@ -1,13 +1,6 @@
 import org.bytedeco.javacpp.*;
-import static java.lang.Math.*;
 import static org.bytedeco.javacpp.v4l2.*;
-import java.io.ByteArrayOutputStream;
-import java.io.ByteArrayInputStream;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.nio.ByteBuffer;
-import javax.imageio.ImageIO;
-import java.io.IOException;
 public class Example 
 {
 
@@ -26,7 +19,6 @@ public class Example
         
         v4l2_capability cap=new v4l2_capability();
         System.out.println(v4l2_ioctl(fd, VIDIOC_QUERYCAP, cap));
-        //System.out.println(VIDIOC_QUERYCAP);
 
         System.out.print("Version: ");
         System.out.println(cap.version());
@@ -58,9 +50,6 @@ public class Example
             }
             
         format.fmt_pix(fmt_pix);
-        System.out.println(v4l2_ioctl(fd, VIDIOC_S_FMT, format));      
-        //format.fmt.pix.width = 800;
-        //format.fmt.pix.height = 600;
         System.out.println(v4l2_ioctl(fd, VIDIOC_S_FMT, format));
         System.out.print("Format: ");
         System.out.println(format);
@@ -73,28 +62,19 @@ public class Example
         bufrequest.count(1);
         System.out.println(v4l2_ioctl(fd, VIDIOC_REQBUFS, bufrequest));
         
-        
-        System.out.print("bufrequest: ");
-        System.out.println(bufrequest);
-        
-        Pointer usrPtr= new Pointer();
-        usrPtr.malloc(fmt_pix.sizeimage());
-        
         v4l2_buffer bufferinfo = new v4l2_buffer();
         Pointer buffer = new Pointer();
         bufferinfo.type(V4L2_BUF_TYPE_VIDEO_CAPTURE);
         bufferinfo.memory(V4L2_MEMORY_MMAP);
         bufferinfo.index(0);
         bufferinfo.length(fmt_pix.sizeimage());
+        
         System.out.print("Allcate buffer");
         System.out.println(v4l2_ioctl(fd, VIDIOC_QUERYBUF, bufferinfo));
-        
         System.out.print("bufferinfo.length() ");
         System.out.println(bufferinfo.length());
-        
         System.out.print("bufferinfo.physicalBytes() ");
         System.out.println(bufferinfo.physicalBytes());
-        
         System.out.print("bufferinfo.bytesused() ");
         System.out.println(bufferinfo.bytesused());   
 
@@ -130,45 +110,6 @@ public class Example
         
         };
          
-        
-//         Pointer buffer_start = v4l2_mmap(
-//             NULL.setNull(),
-//             bufferinfo.length(),
-//             1 | 2,
-//             4,
-//             fd,
-//             bufferinfo.m_offset());
-//             
-        //NULL.capacity() ;
-        //buffer_start.put(bufferv4l2_mmap);
-       // System.out.println(buffer_start);
-       // buffer_start.fill(bufferinfo.length()); 
-//         System.out.print("bufferinfo.totalBytes() before");
-//         System.out.println(bufferinfo.totalBytes());
-//         //bufferinfo.fill(bufferinfo.length());
-         //bufferinfo.memset(sp, 0, bufferinfo.length());
-         //bufferinfo.put(sp);
-//         System.out.print("bufferinfo.totalBytes() after");
-//         System.out.println(bufferinfo.totalBytes());
-        //buffer_start.fill(bufferinfo.length());
-
-
-        
-        
-//         System.out.print("queue buffer: ");
-//         System.out.println(v4l2_ioctl(fd, VIDIOC_QBUF, bufferinfo));
-//         // Activate streaming
-//         IntPointer type_i = new IntPointer(bufferinfo.type());
-//                 System.out.println(type_i);
-// 
-//         int type =V4L2_BUF_TYPE_VIDEO_CAPTURE;
-//         System.out.print("Start Streaming ");
-//         System.out.println(v4l2_ioctl(fd, VIDIOC_STREAMON, 1));
-//         
-//         System.out.print("deque buffer ");
-//         System.out.println(v4l2_ioctl(fd, VIDIOC_DQBUF, bufferinfo));
-//         
-
         BytePointer bff =new BytePointer(bufferinfo.length());
         System.out.print("bff.totalBytes() ");
         System.out.println(bff.totalBytes());
@@ -180,33 +121,11 @@ public class Example
                  v4l2_write(fd_out, bff, bufferinfo.length());
          }
          
-        for (int i = 0; i < 300; i++) {
+        for (int i = 0; i < 30000; i++) {
             v4l2_read(fd, bff, bufferinfo.length());
             v4l2_write(fd_out, bff, bufferinfo.length());
 
          }
-
-//          System.out.print("res ");
-//         System.out.println(res);
-// 
-//          byte[] arr = new byte[bufferinfo.length()];
-//          bff.get(arr);
-//          System.out.println(arr);
-// //         
-//                             System.out.print("arr.length ");
-//          System.out.println(arr.length);
-// //         
-//          try {
-//              BufferedImage imag=ImageIO.read(new ByteArrayInputStream(arr));
-//             System.out.print("imag ");
-//             System.out.println(imag);
-//             
-//             ImageIO.write(imag, "jpg", new File("./","snap.jpg"));
-//  
-//          } catch (IOException e) {
-//              throw new RuntimeException(e);
-//          }
-         
 
         flag=v4l2_close(fd);
         v4l2_close(fd_out);
