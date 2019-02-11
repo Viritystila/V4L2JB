@@ -9,7 +9,7 @@
     <version>1.4.5-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.viritystila</groupId>
   <artifactId>v4l2</artifactId>
   <version>Latest-${project.parent.version}</version>
   <packaging>jar</packaging>

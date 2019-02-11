@@ -10,7 +10,7 @@
     <relativePath>../../</relativePath>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.viritystila</groupId>
   <artifactId>v4l2-platform</artifactId>
   <version>Latest-${project.parent.version}</version>
   <name>JavaCPP Presets for v4l2</name>
